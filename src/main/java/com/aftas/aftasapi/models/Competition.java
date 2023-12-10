@@ -20,7 +20,11 @@ public class Competition {
     private String location;
     private Double amount;
     @ManyToMany()
-    @JoinTable(name = "ranking", joinColumns = @JoinColumn(name = "competition_code"), inverseJoinColumns = @JoinColumn(name = "member_id"))
+    @JoinTable(
+        name = "ranking",
+        joinColumns = @JoinColumn(name = "competition_code", referencedColumnName = "competition_code"),
+        inverseJoinColumns = @JoinColumn(name = "member_id", referencedColumnName = "member_num")
+    )
     private Set<Member> members = new HashSet<>();
     @OneToMany
     private Set<Hunting> hunting = new HashSet<>();

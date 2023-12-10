@@ -13,5 +13,4 @@ public class CompetitionMember implements Serializable {
     private Integer memberNumber;
     @Column(nullable = false, name = "competition_code")
     private String competitionCode;
-
 }
