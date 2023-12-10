@@ -1,20 +1,22 @@
 package com.aftas.aftasapi.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Level {
     @Id
-    private Integer code;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String description;
     private Integer points;
-    @OneToMany
-    Set<Fish> fish = new HashSet<>();
+    @OneToMany(mappedBy = "level", fetch = FetchType.LAZY)
+    private List<Fish> fishes;
 }

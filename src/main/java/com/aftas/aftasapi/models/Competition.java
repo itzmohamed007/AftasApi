@@ -1,33 +1,32 @@
 package com.aftas.aftasapi.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.sql.Time;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Competition {
     @Id
     private String code;
-    private Date date;
-    private Time startTime;
-    private Time endTime;
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Integer numberOfParticipants;
     private String location;
     private Double amount;
-    @ManyToMany()
-    @JoinTable(
-        name = "ranking",
-        joinColumns = @JoinColumn(name = "competition_code", referencedColumnName = "competition_code"),
-        inverseJoinColumns = @JoinColumn(name = "member_id", referencedColumnName = "member_num")
-    )
-    private Set<Member> members = new HashSet<>();
-    @OneToMany
-    private Set<Hunting> hunting = new HashSet<>();
-    @OneToMany
-    private Set<Ranking> rankings = new HashSet<>();
+    @OneToMany(mappedBy = "competition", fetch = FetchType.LAZY)
+    private List<Ranking> rankings;
+    @OneToMany(mappedBy = "competition", fetch = FetchType.LAZY)
+    private List<Hunting> hunting;
 }

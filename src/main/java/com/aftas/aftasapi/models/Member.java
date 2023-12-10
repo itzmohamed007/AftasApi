@@ -2,29 +2,31 @@ package com.aftas.aftasapi.models;
 
 import com.aftas.aftasapi.enums.IdentityDocumentType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer number;
+    private Integer id;
     private String name;
     private String familyName;
-    private Date accessionDate;
+    private LocalDate accessionDate;
     private String nationality;
+    @Column(unique = true)
+    private String identityNumber;
     @Enumerated(EnumType.STRING)
     private IdentityDocumentType identityDocument;
-    private String identityNumber;
-    @ManyToMany(mappedBy = "members")
-    private Set<Competition> competitions = new HashSet<>();
-    @OneToMany(mappedBy = "member")
-    private Set<Hunting> hunting = new HashSet<>();
-    @OneToMany(mappedBy = "member")
-    private Set<Ranking> rankings = new HashSet<>();
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Ranking> rankings;
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Hunting> hunting;
 }
