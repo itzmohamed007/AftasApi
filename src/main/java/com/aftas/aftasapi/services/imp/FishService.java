@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class FishService implements IFishService {
     public ResFish read(String name) {
         Optional<Fish> fish = repository.findById(name);
         if(fish.isPresent()) {
-            return modelMapper.map(fish, ResFish.class);
+            return modelMapper.map(fish.get(), ResFish.class);
         }
         throw new FishNotFoundException("Fish not found with name " + name);
     }
@@ -74,9 +75,7 @@ public class FishService implements IFishService {
     @Override
     public void delete(String name) {
         Optional<Fish> fish = repository.findById(name);
-        if (fish.isPresent()) {
-            repository.deleteById(name);
-        }
-        throw new FishNotFoundException("No fish was found with name " + name);
+        if (fish.isPresent()) repository.deleteById(name);
+        else throw new FishNotFoundException("No fish was found with name " + name);
     }
 }

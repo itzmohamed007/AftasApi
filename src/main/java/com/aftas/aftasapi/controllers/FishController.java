@@ -21,33 +21,39 @@ public class FishController implements GlobalController<ReqFish, ResFish, String
     private final FishService service;
 
     @Override
-    @GetMapping()
-    public ResponseEntity<ResFish> read(String s) {
-        return null;
+    @GetMapping("/{name}")
+    public ResponseEntity<ResFish> read(@PathVariable String name) {
+        return new ResponseEntity<>(service.read(name), HttpStatus.OK);
     }
 
     @Override
+    @GetMapping("/all")
     public ResponseEntity<List<ResFish>> readAll() {
-        return null;
+        return new ResponseEntity<>(service.readAll(), HttpStatus.OK);
     }
 
     @Override
+    @GetMapping
     public ResponseEntity<Page<ResFish>> readAllPaginated(Pageable pageable) {
-        return null;
+        return new ResponseEntity<>(service.readAllPaginated(pageable), HttpStatus.OK);
     }
 
     @Override
-        public ResponseEntity<ResFish> create(@Valid @RequestBody ReqFish reqFish) {
-            return new ResponseEntity<>(service.create(reqFish), HttpStatus.CREATED);
+    @PostMapping
+    public ResponseEntity<ResFish> create(@Valid @RequestBody ReqFish reqFish) {
+        return new ResponseEntity<>(service.create(reqFish), HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<ResFish> update(ReqFish reqFish, String s) {
-        return null;
+    @PutMapping("/{name}")
+    public ResponseEntity<ResFish> update(@Valid @RequestBody ReqFish reqFish, @PathVariable String name) {
+        return new ResponseEntity<>(service.update(reqFish, name), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<Map<String, String>> delete(String s) {
-        return null;
+    @DeleteMapping("/{name}")
+    public ResponseEntity<Map<String, String>> delete(@PathVariable String name) {
+        service.delete(name);
+        return new ResponseEntity<>(Map.of("message", "Fish deleted successfully"), HttpStatus.OK);
     }
 }
