@@ -25,7 +25,7 @@ public class LevelService implements ILevelService {
     public ResLevel read(Integer id) {
         Optional<Level> level = repository.findById(id);
         if(level.isPresent())
-            return modelMapper.map(level, ResLevel.class);
+            return modelMapper.map(level.get(), ResLevel.class);
         throw new LevelNotFoundException("level not found with id " + id);
     }
 

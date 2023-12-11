@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
-    
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(LevelNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleLevelNotFoundException(LevelNotFoundException ex) {
