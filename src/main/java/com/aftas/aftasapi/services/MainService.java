@@ -13,6 +13,6 @@ public interface MainService<X, Y, Z> {
     List<Y> readAll();
     Page<Y> readAllPaginated(Pageable pageable);
     Y create(X x);
-    Y update(X x, Integer id);
+    Y update(X x, Z id);
     void delete(Z z);
 }

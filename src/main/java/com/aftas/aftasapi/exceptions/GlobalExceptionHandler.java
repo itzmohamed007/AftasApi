@@ -30,4 +30,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleLevelNotFoundException(LevelNotFoundException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
     }
+
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(FishNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleFishNotFoundException(FishNotFoundException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
 }

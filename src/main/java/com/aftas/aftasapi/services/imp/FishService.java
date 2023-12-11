@@ -2,7 +2,11 @@ package com.aftas.aftasapi.services.imp;
 
 import com.aftas.aftasapi.dtos.ReqFish;
 import com.aftas.aftasapi.dtos.ResFish;
+import com.aftas.aftasapi.dtos.ResLevel;
+import com.aftas.aftasapi.exceptions.FishNotFoundException;
+import com.aftas.aftasapi.exceptions.LevelNotFoundException;
 import com.aftas.aftasapi.models.Fish;
+import com.aftas.aftasapi.models.Level;
 import com.aftas.aftasapi.repositories.FishRepository;
 import com.aftas.aftasapi.services.IFishService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,36 +25,58 @@ public class FishService implements IFishService {
     private final ModelMapper modelMapper;
 
     @Override
-    public ResFish read(String s) {
-        return null;
+    public ResFish read(String name) {
+        Optional<Fish> fish = repository.findById(name);
+        if(fish.isPresent()) {
+            return modelMapper.map(fish, ResFish.class);
+        }
+        throw new FishNotFoundException("Fish not found with name " + name);
     }
 
     @Override
     public List<ResFish> readAll() {
-        return null;
+        List<ResFish> fishes = repository.findAll().stream()
+                .map(fish -> modelMapper.map(fish, ResFish.class))
+                .toList();
+        if(fishes.isEmpty()) {
+            throw new LevelNotFoundException("No Fishes were found");
+        }
+        return fishes;
     }
 
     @Override
     public Page<ResFish> readAllPaginated(Pageable pageable) {
-        return null;
+        Page<Fish> paginatedFishes = repository.findAll(pageable);
+        if(paginatedFishes.isEmpty()) {
+            throw new LevelNotFoundException("No Fishes were found");
+        }
+        return repository.findAll(pageable).map(fish -> modelMapper.map(fish, ResFish.class));
     }
 
     @Override
     public ResFish create(ReqFish reqFish) {
-        System.out.println("service called");
         Fish fish = modelMapper.map(reqFish, Fish.class);
         Fish savedFish = repository.save(fish);
-        System.out.println("created fish + " + savedFish.getName());
         return modelMapper.map(savedFish, ResFish.class);
     }
 
     @Override
-    public ResFish update(ReqFish reqFish, Integer id) {
-        return null;
+    public ResFish update(ReqFish reqFish, String name) {
+        Optional<Fish> fish = repository.findById(name);
+        if (fish.isPresent()) {
+            reqFish.setName(name);
+            Fish createdFish = repository.save(modelMapper.map(reqFish, Fish.class));
+            return modelMapper.map(createdFish, ResFish.class);
+        }
+        throw new FishNotFoundException("No fish was found with name " + name);
     }
 
     @Override
-    public void delete(String s) {
-
+    public void delete(String name) {
+        Optional<Fish> fish = repository.findById(name);
+        if (fish.isPresent()) {
+            repository.deleteById(name);
+        }
+        throw new FishNotFoundException("No fish was found with name " + name);
     }
 }
