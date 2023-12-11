@@ -4,6 +4,7 @@ import com.aftas.aftasapi.dtos.ReqMember;
 import com.aftas.aftasapi.dtos.ResLevel;
 import com.aftas.aftasapi.dtos.ResMember;
 import com.aftas.aftasapi.exceptions.LevelNotFoundException;
+import com.aftas.aftasapi.exceptions.MemberNotFoundException;
 import com.aftas.aftasapi.models.Level;
 import com.aftas.aftasapi.models.Member;
 import com.aftas.aftasapi.repositories.MemberRepository;
@@ -28,7 +29,7 @@ public class MemberService implements IMemberService {
         Optional<Member> member = repository.findById(id);
         if(member.isPresent())
             return modelMapper.map(member.get(), ResMember.class);
-        throw new LevelNotFoundException("member not found with id " + id);
+        throw new MemberNotFoundException("member not found with id " + id);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class MemberService implements IMemberService {
                 .map(member -> modelMapper.map(member, ResMember.class))
                 .toList();
         if(members.isEmpty()) {
-            throw new LevelNotFoundException("No members were found");
+            throw new MemberNotFoundException("No members were found");
         }
         return members;
     }
@@ -46,7 +47,7 @@ public class MemberService implements IMemberService {
     public Page<ResMember> readAllPaginated(Pageable pageable) {
         Page<Member> paginatedMembers = repository.findAll(pageable);
         if(paginatedMembers.isEmpty()) {
-            throw new LevelNotFoundException("No Members were found");
+            throw new MemberNotFoundException("No Members were found");
         }
         return paginatedMembers.map(member -> modelMapper.map(member, ResMember.class));
     }
@@ -66,7 +67,7 @@ public class MemberService implements IMemberService {
             Member insertMember = repository.save(modelMapper.map(reqMember, Member.class));
             return modelMapper.map(insertMember, ResMember.class);
         }
-        throw new LevelNotFoundException("No member was found with id " + id);
+        throw new MemberNotFoundException("No member was found with id " + id);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class MemberService implements IMemberService {
         if(member.isPresent()) {
             repository.deleteById(id);
         } else {
-            throw new LevelNotFoundException("Member not found with id " + id);
+            throw new MemberNotFoundException("Member not found with id " + id);
         }
     }
 }
