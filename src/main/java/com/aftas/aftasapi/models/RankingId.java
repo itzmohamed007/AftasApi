@@ -1,7 +1,6 @@
 package com.aftas.aftasapi.models;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.MapsId;
 
 import java.io.Serializable;
 

@@ -61,6 +61,7 @@ public class LevelService implements ILevelService {
     public ResLevel update(ReqLevel reqLevel, Integer id) {
         Optional<Level> level = repository.findById(id);
         if(level.isPresent()) {
+            reqLevel.setId(id);
             Level insertLevel = repository.save(modelMapper.map(reqLevel, Level.class));
             return modelMapper.map(insertLevel, ResLevel.class);
         }
@@ -72,7 +73,8 @@ public class LevelService implements ILevelService {
         Optional<Level> level = repository.findById(id);
         if(level.isPresent()) {
             repository.deleteById(id);
+        } else {
+            throw new LevelNotFoundException("Level not found with id " + id);
         }
-        throw new LevelNotFoundException("Level not found with id " + id);
     }
 }
