@@ -55,6 +55,6 @@ public class MemberController implements GlobalController<ReqMember, ResMember, 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Integer id) {
         service.delete(id);
-        return new ResponseEntity<>(Map.of("message", "Member created Successfully"), HttpStatus.OK);
+        return new ResponseEntity<>(Map.of("message", "Member deleted Successfully"), HttpStatus.OK);
     }
 }
