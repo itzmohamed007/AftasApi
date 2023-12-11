@@ -37,7 +37,11 @@ public class LevelController {
 
     @PostMapping
     public ResponseEntity<ResLevel> create(@Valid @RequestBody ReqLevel reqLevel) {
-        System.out.println("create methd mapped");
         return new ResponseEntity<>(service.create(reqLevel), HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<ResLevel> update(@Valid @RequestBody ReqLevel reqLevel) {
+        return new ResponseEntity<>(service.update(reqLevel), HttpStatus.OK);
     }
 }

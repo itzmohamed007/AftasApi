@@ -59,7 +59,12 @@ public class LevelService implements ILevelService {
 
     @Override
     public ResLevel update(ReqLevel reqLevel) {
-        return null;
+        Optional<Level> level = repository.findById(reqLevel.getId());
+        if(level.isPresent()) {
+            Level insertLevel = repository.save(modelMapper.map(reqLevel, Level.class));
+            return modelMapper.map(insertLevel, ResLevel.class);
+        }
+        throw new LevelNotFoundException("No level was found with id " + reqLevel.getId());
     }
 
     @Override
