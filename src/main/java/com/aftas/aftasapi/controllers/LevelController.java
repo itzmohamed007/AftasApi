@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -40,8 +41,14 @@ public class LevelController {
         return new ResponseEntity<>(service.create(reqLevel), HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<ResLevel> update(@Valid @RequestBody ReqLevel reqLevel) {
-        return new ResponseEntity<>(service.update(reqLevel), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<ResLevel> update(@Valid @RequestBody ReqLevel reqLevel, @PathVariable Integer id) {
+        return new ResponseEntity<>(service.update(reqLevel, id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Integer id) {
+        service.delete(id);
+        return new ResponseEntity<>(Map.of("message", "Level deleted successfully"), HttpStatus.OK);
     }
 }

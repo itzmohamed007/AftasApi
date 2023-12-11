@@ -6,8 +6,6 @@ import lombok.Data;
 
 @Data
 public class ReqLevel {
-    @NotNull(message = "id cannot be null")
-    private Integer id;
     @NotNull(message = "description cannot be null")
     private String description;
     @Min(value = 1, message = "points cannot be less than 1")
