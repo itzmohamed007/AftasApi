@@ -19,8 +19,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/levels")
-public class LevelController {
+public class LevelController implements GlobalController<ReqLevel, ResLevel, Integer> {
     private final ILevelService service;
+
+    @Override
     @GetMapping("/{id}")
     public ResponseEntity<ResLevel> read(@PathVariable Integer id) {
         return new ResponseEntity<>(service.read(id), HttpStatus.FOUND);
