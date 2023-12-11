@@ -51,8 +51,11 @@ public class LevelService implements ILevelService {
 
     @Override
     public ResLevel create(ReqLevel reqLevel) {
-        return null;
+        Level level = modelMapper.map(reqLevel, Level.class);
+        Level savedLevel = repository.save(level);
+        return modelMapper.map(savedLevel, ResLevel.class);
     }
+
 
     @Override
     public ResLevel update(ReqLevel reqLevel) {
