@@ -5,12 +5,14 @@ import com.aftas.aftasapi.dtos.ResLevel;
 import com.aftas.aftasapi.dtos.ResMember;
 import com.aftas.aftasapi.exceptions.LevelNotFoundException;
 import com.aftas.aftasapi.exceptions.MemberNotFoundException;
+import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
 import com.aftas.aftasapi.models.Level;
 import com.aftas.aftasapi.models.Member;
 import com.aftas.aftasapi.repositories.MemberRepository;
 import com.aftas.aftasapi.services.IMemberService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -54,20 +56,27 @@ public class MemberService implements IMemberService {
 
     @Override
     public ResMember create(ReqMember reqMember) {
-        Member member = modelMapper.map(reqMember, Member.class);
-        Member savedMember = repository.save(member);
-        return modelMapper.map(savedMember, ResMember.class);
+        try {
+            Member member = modelMapper.map(reqMember, Member.class);
+            Member savedMember = repository.save(member);
+            return modelMapper.map(savedMember, ResMember.class);
+        } catch (DataIntegrityViolationException e) {
+            throw new UniqueConstraintViolationException("Violated unique constraint (document number)");
+        }
     }
 
     @Override
     public ResMember update(ReqMember reqMember, Integer id) {
         Optional<Member> level = repository.findById(id);
         if(level.isPresent()) {
-            reqMember.setId(id);
-            Member insertMember = repository.save(modelMapper.map(reqMember, Member.class));
-            return modelMapper.map(insertMember, ResMember.class);
-        }
-        throw new MemberNotFoundException("No member was found with id " + id);
+            try {
+                reqMember.setId(id);
+                Member insertMember = repository.save(modelMapper.map(reqMember, Member.class));
+                return modelMapper.map(insertMember, ResMember.class);
+            } catch (DataIntegrityViolationException e) {
+                throw new UniqueConstraintViolationException("Violated unique constraint (document number)");
+            }
+        } else throw new MemberNotFoundException("No member was found with id " + id);
     }
 
     @Override

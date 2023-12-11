@@ -25,6 +25,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(UniqueConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleUniqueConstraintViolationException(UniqueConstraintViolationException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.CONFLICT);
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(LevelNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleLevelNotFoundException(LevelNotFoundException ex) {

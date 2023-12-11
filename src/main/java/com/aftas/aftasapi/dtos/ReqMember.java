@@ -3,7 +3,10 @@ package com.aftas.aftasapi.dtos;
 import com.aftas.aftasapi.enums.IdentityDocumentType;
 import com.aftas.aftasapi.models.Hunting;
 import com.aftas.aftasapi.models.Ranking;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,10 +14,15 @@ import java.util.List;
 @Data
 public class ReqMember {
     private Integer id;
+    @NotNull(message = "name cannot be null")
     private String name;
+    @NotNull(message = "family name cannot be null")
     private String familyName;
-    private LocalDate accessionDate;
+    private LocalDate accessionDate = LocalDate.now(); // making sure that accession date will always be the current day date
+    @NotNull(message = "nationality cannot be null")
     private String nationality;
+    @NotNull(message = "identity number cannot be null")
     private String identityNumber;
+    @NotNull(message = "identity document type cannot be null")
     private IdentityDocumentType identityDocument;
 }

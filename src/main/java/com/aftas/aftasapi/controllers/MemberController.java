@@ -3,7 +3,9 @@ package com.aftas.aftasapi.controllers;
 import com.aftas.aftasapi.dtos.ReqMember;
 import com.aftas.aftasapi.dtos.ResMember;
 import com.aftas.aftasapi.services.IMemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -39,13 +41,13 @@ public class MemberController implements GlobalController<ReqMember, ResMember, 
 
     @Override
     @PostMapping
-    public ResponseEntity<ResMember> create(@RequestBody ReqMember reqMember) {
+    public ResponseEntity<ResMember> create(@Valid @RequestBody ReqMember reqMember) {
         return new ResponseEntity<>(service.create(reqMember), HttpStatus.CREATED);
     }
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<ResMember> update(@RequestBody ReqMember reqMember, @PathVariable Integer id) {
+    public ResponseEntity<ResMember> update(@Valid @RequestBody ReqMember reqMember, @PathVariable Integer id) {
         return new ResponseEntity<>(service.update(reqMember, id), HttpStatus.OK);
     }
 
