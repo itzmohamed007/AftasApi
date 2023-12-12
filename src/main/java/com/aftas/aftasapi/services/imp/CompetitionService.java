@@ -15,6 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +59,15 @@ public class CompetitionService implements ICompetitionService {
     @Override
     public ResCompetition create(ReqCompetition reqCompetition) {
         try {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
             Competition competition = modelMapper.map(reqCompetition, Competition.class);
+
+            competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
+            competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
+            competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
+
             Competition savedCompetition = repository.save(competition);
             return modelMapper.map(savedCompetition, ResCompetition.class);
         } catch (DataIntegrityViolationException e) {
