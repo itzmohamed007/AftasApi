@@ -6,12 +6,14 @@ import com.aftas.aftasapi.dtos.ResFish;
 import com.aftas.aftasapi.exceptions.CompetitionNotFoundException;
 import com.aftas.aftasapi.exceptions.FishNotFoundException;
 import com.aftas.aftasapi.exceptions.LevelNotFoundException;
+import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
 import com.aftas.aftasapi.models.Competition;
 import com.aftas.aftasapi.models.Fish;
 import com.aftas.aftasapi.repositories.CompetitionRepository;
 import com.aftas.aftasapi.services.ICompetitionService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -56,12 +58,23 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public ResCompetition create(ReqCompetiton reqCompetiton) {
-        return null;
+        try {
+            Competition competition = modelMapper.map(reqCompetiton, Competition.class);
+            Competition savedCompetition = repository.save(competition);
+            return modelMapper.map(savedCompetition, ResCompetition.class);
+        } catch (DataIntegrityViolationException e) {
+            throw new UniqueConstraintViolationException("Violated unique constraint (code)");
+        }
     }
 
     @Override
     public ResCompetition update(ReqCompetiton reqCompetiton, String code) {
-        return null;
+        Optional<Competition> competition = repository.findById(code);
+        if (competition.isPresent()) {
+            reqCompetiton.setName(code);
+            Competition createdcompetition = repository.save(modelMapper.map(reqCompetiton, Competition.class));
+            return modelMapper.map(createdcompetition, ResCompetition.class);
+        } else throw new CompetitionNotFoundException("No competition was found with code " + code);
     }
 
     @Override
