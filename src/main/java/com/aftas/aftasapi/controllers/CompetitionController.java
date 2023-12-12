@@ -41,7 +41,7 @@ public class CompetitionController implements GlobalController<ReqCompetition, R
     @Override
     @PostMapping
     public ResponseEntity<ResCompetition> create(@Valid @RequestBody ReqCompetition reqCompetition) {
-        return null;
+        return new ResponseEntity<>(service.create(reqCompetition), HttpStatus.CREATED);
     }
 
     @Override
