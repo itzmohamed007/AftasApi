@@ -9,6 +9,7 @@ import com.aftas.aftasapi.models.Fish;
 import com.aftas.aftasapi.repositories.CompetitionRepository;
 import com.aftas.aftasapi.services.ICompetitionService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CompetitionService implements ICompetitionService {
     private final CompetitionRepository repository;
+    private final ModelMapper modelMapper;
 
     @Override
     public ResCompetition read(String code) {
         Optional<Competition> competition = repository.findById(code);
-        if(fish.isPresent()) {
-            return modelMapper.map(fish.get(), ResFish.class);
+        if(competition.isPresent()) {
+            return modelMapper.map(competition.get(), ResCompetition.class);
         }
-        throw new FishNotFoundException("Fish not found with name " + name);
+        throw new FishNotFoundException("Competition not found with code " + code);
     }
 
     @Override
