@@ -2,12 +2,12 @@ package com.aftas.aftasapi.controllers;
 
 import com.aftas.aftasapi.dtos.ReqCompetition;
 import com.aftas.aftasapi.dtos.ResCompetition;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -18,32 +18,38 @@ import java.util.Map;
 public class CompetitionController implements GlobalController<ReqCompetition, ResCompetition, String> {
 
     @Override
-    public ResponseEntity<ResCompetition> read(String s) {
+    @GetMapping("/{code}")
+    public ResponseEntity<ResCompetition> read(@PathVariable String code) {
         return null;
     }
 
     @Override
+    @GetMapping("/all")
     public ResponseEntity<List<ResCompetition>> readAll() {
         return null;
     }
 
     @Override
+    @GetMapping
     public ResponseEntity<Page<ResCompetition>> readAllPaginated(Pageable pageable) {
         return null;
     }
 
     @Override
-    public ResponseEntity<ResCompetition> create(ReqCompetition reqCompetition) {
+    @PostMapping
+    public ResponseEntity<ResCompetition> create(@Valid @RequestBody ReqCompetition reqCompetition) {
         return null;
     }
 
     @Override
-    public ResponseEntity<ResCompetition> update(ReqCompetition reqCompetition, String s) {
+    @PutMapping("/{code}")
+    public ResponseEntity<ResCompetition> update(@Valid @RequestBody ReqCompetition reqCompetition, @PathVariable String code) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Map<String, String>> delete(String s) {
+    @DeleteMapping("/{code}")
+    public ResponseEntity<Map<String, String>> delete(@PathVariable String code) {
         return null;
     }
 }
