@@ -2,10 +2,12 @@ package com.aftas.aftasapi.controllers;
 
 import com.aftas.aftasapi.dtos.ReqCompetition;
 import com.aftas.aftasapi.dtos.ResCompetition;
+import com.aftas.aftasapi.services.ICompetitionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,11 +18,12 @@ import java.util.Map;
 @RequestMapping("/api/competitions")
 @RequiredArgsConstructor
 public class CompetitionController implements GlobalController<ReqCompetition, ResCompetition, String> {
+    private final ICompetitionService service;
 
     @Override
     @GetMapping("/{code}")
     public ResponseEntity<ResCompetition> read(@PathVariable String code) {
-        return null;
+        return new ResponseEntity<>(service.read(code), HttpStatus.OK);
     }
 
     @Override
