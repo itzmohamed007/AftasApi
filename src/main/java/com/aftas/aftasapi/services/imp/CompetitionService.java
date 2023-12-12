@@ -61,7 +61,8 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public ResCompetition create(ReqCompetition reqCompetition) {
-        try {
+        if(isPresent(reqCompetition.getCode())) throw new UniqueConstraintViolationException("Violated unique constraint (code)");
+        else {
             Competition competition = modelMapper.map(reqCompetition, Competition.class);
 
             competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
@@ -70,8 +71,6 @@ public class CompetitionService implements ICompetitionService {
 
             Competition savedCompetition = repository.save(competition);
             return modelMapper.map(savedCompetition, ResCompetition.class);
-        } catch (DataIntegrityViolationException e) {
-            throw new UniqueConstraintViolationException("Violated unique constraint (code)");
         }
     }
 
@@ -81,9 +80,11 @@ public class CompetitionService implements ICompetitionService {
         if (dbCompetition.isPresent()) {
             Competition competition = modelMapper.map(reqCompetition, Competition.class);
             competition.setCode(code);
+
             competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
             competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
             competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
+
             Competition createdcompetition = repository.save(competition);
             return modelMapper.map(createdcompetition, ResCompetition.class);
         } else throw new CompetitionNotFoundException("No competition was found with code " + code);
@@ -94,5 +95,9 @@ public class CompetitionService implements ICompetitionService {
         Optional<Competition> competition = repository.findById(code);
         if (competition.isPresent()) repository.deleteById(code);
         else throw new FishNotFoundException("No competition was found with code " + code);
+    }
+
+    private boolean isPresent(String code) {
+        return repository.findById(code).isPresent();
     }
 }
