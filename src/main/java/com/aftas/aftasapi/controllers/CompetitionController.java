@@ -35,7 +35,7 @@ public class CompetitionController implements GlobalController<ReqCompetition, R
     @Override
     @GetMapping
     public ResponseEntity<Page<ResCompetition>> readAllPaginated(Pageable pageable) {
-        return null;
+        return new ResponseEntity<>(service.readAllPaginated(pageable), HttpStatus.OK);
     }
 
     @Override
