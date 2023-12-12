@@ -47,7 +47,11 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public Page<ResCompetition> readAllPaginated(Pageable pageable) {
-        return null;
+        Page<Competition> paginatedCompetitions = repository.findAll(pageable);
+        if(paginatedCompetitions.isEmpty()) {
+            throw new CompetitionNotFoundException("No Competitions were found");
+        }
+        return paginatedCompetitions.map(competition -> modelMapper.map(competition, ResCompetition.class));
     }
 
     @Override
