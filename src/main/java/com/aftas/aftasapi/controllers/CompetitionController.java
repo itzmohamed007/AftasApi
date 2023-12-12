@@ -47,12 +47,13 @@ public class CompetitionController implements GlobalController<ReqCompetition, R
     @Override
     @PutMapping("/{code}")
     public ResponseEntity<ResCompetition> update(@Valid @RequestBody ReqCompetition reqCompetition, @PathVariable String code) {
-        return null;
+        return new ResponseEntity<>(service.update(reqCompetition, code), HttpStatus.OK);
     }
 
     @Override
     @DeleteMapping("/{code}")
     public ResponseEntity<Map<String, String>> delete(@PathVariable String code) {
-        return null;
+        service.delete(code);
+        return new ResponseEntity<>(Map.of("message", "competition deleted successfully"), HttpStatus.OK);
     }
 }
