@@ -15,7 +15,6 @@ import java.util.List;
 @Entity
 public class Fish {
     @Id
-    @Column(unique = true, nullable = false)
     private String name;
     private Double averageWeight;
     @ManyToOne

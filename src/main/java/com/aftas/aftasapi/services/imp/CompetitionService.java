@@ -27,6 +27,9 @@ public class CompetitionService implements ICompetitionService {
     private final CompetitionRepository repository;
     private final ModelMapper modelMapper;
 
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
     @Override
     public ResCompetition read(String code) {
         Optional<Competition> competition = repository.findById(code);
@@ -59,9 +62,6 @@ public class CompetitionService implements ICompetitionService {
     @Override
     public ResCompetition create(ReqCompetition reqCompetition) {
         try {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
             Competition competition = modelMapper.map(reqCompetition, Competition.class);
 
             competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
@@ -77,10 +77,14 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public ResCompetition update(ReqCompetition reqCompetition, String code) {
-        Optional<Competition> competition = repository.findById(code);
-        if (competition.isPresent()) {
-            reqCompetition.setCode(code);
-            Competition createdcompetition = repository.save(modelMapper.map(reqCompetition, Competition.class));
+        Optional<Competition> dbCompetition = repository.findById(code);
+        if (dbCompetition.isPresent()) {
+            Competition competition = modelMapper.map(reqCompetition, Competition.class);
+            competition.setCode(code);
+            competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
+            competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
+            competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
+            Competition createdcompetition = repository.save(competition);
             return modelMapper.map(createdcompetition, ResCompetition.class);
         } else throw new CompetitionNotFoundException("No competition was found with code " + code);
     }
