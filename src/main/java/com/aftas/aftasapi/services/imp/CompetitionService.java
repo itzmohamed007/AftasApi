@@ -5,6 +5,7 @@ import com.aftas.aftasapi.dtos.ResCompetition;
 import com.aftas.aftasapi.dtos.ResFish;
 import com.aftas.aftasapi.exceptions.CompetitionNotFoundException;
 import com.aftas.aftasapi.exceptions.FishNotFoundException;
+import com.aftas.aftasapi.exceptions.LevelNotFoundException;
 import com.aftas.aftasapi.models.Competition;
 import com.aftas.aftasapi.models.Fish;
 import com.aftas.aftasapi.repositories.CompetitionRepository;
@@ -35,7 +36,13 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public List<ResCompetition> readAll() {
-        return null;
+        List<ResCompetition> competitions = repository.findAll().stream()
+                .map(competition -> modelMapper.map(competition, ResCompetition.class))
+                .toList();
+        if(competitions.isEmpty()) {
+            throw new CompetitionNotFoundException("No competitions were found");
+        }
+        return competitions;
     }
 
     @Override
