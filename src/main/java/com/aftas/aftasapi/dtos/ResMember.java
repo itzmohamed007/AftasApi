@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 public class ResMember {
-    private Integer id;
+    private Integer num;
     private String name;
     private String familyName;
     private LocalDate accessionDate;

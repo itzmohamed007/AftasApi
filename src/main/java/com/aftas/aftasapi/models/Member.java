@@ -16,7 +16,7 @@ import java.util.List;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer num;
     private String name;
     private String familyName;
     private LocalDate accessionDate;

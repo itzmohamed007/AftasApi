@@ -22,9 +22,9 @@ public class MemberController implements GlobalController<ReqMember, ResMember, 
     private final IMemberService service;
 
     @Override
-    @GetMapping("/{id}")
-    public ResponseEntity<ResMember> read(@PathVariable Integer id) {
-        return new ResponseEntity<>(service.read(id), HttpStatus.OK);
+    @GetMapping("/{num}")
+    public ResponseEntity<ResMember> read(@PathVariable Integer num) {
+        return new ResponseEntity<>(service.read(num), HttpStatus.OK);
     }
 
     @Override
@@ -46,15 +46,15 @@ public class MemberController implements GlobalController<ReqMember, ResMember, 
     }
 
     @Override
-    @PutMapping("/{id}")
-    public ResponseEntity<ResMember> update(@Valid @RequestBody ReqMember reqMember, @PathVariable Integer id) {
-        return new ResponseEntity<>(service.update(reqMember, id), HttpStatus.OK);
+    @PutMapping("/{num}")
+    public ResponseEntity<ResMember> update(@Valid @RequestBody ReqMember reqMember, @PathVariable Integer num) {
+        return new ResponseEntity<>(service.update(reqMember, num), HttpStatus.OK);
     }
 
     @Override
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable Integer id) {
-        service.delete(id);
+    @DeleteMapping("/{num}")
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Integer num) {
+        service.delete(num);
         return new ResponseEntity<>(Map.of("message", "Member deleted Successfully"), HttpStatus.OK);
     }
 }
