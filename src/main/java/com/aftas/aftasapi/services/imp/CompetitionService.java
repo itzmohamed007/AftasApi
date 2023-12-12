@@ -1,14 +1,11 @@
 package com.aftas.aftasapi.services.imp;
 
-import com.aftas.aftasapi.dtos.ReqCompetiton;
+import com.aftas.aftasapi.dtos.ReqCompetition;
 import com.aftas.aftasapi.dtos.ResCompetition;
-import com.aftas.aftasapi.dtos.ResFish;
 import com.aftas.aftasapi.exceptions.CompetitionNotFoundException;
 import com.aftas.aftasapi.exceptions.FishNotFoundException;
-import com.aftas.aftasapi.exceptions.LevelNotFoundException;
 import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
 import com.aftas.aftasapi.models.Competition;
-import com.aftas.aftasapi.models.Fish;
 import com.aftas.aftasapi.repositories.CompetitionRepository;
 import com.aftas.aftasapi.services.ICompetitionService;
 import lombok.RequiredArgsConstructor;
@@ -57,9 +54,9 @@ public class CompetitionService implements ICompetitionService {
     }
 
     @Override
-    public ResCompetition create(ReqCompetiton reqCompetiton) {
+    public ResCompetition create(ReqCompetition reqCompetition) {
         try {
-            Competition competition = modelMapper.map(reqCompetiton, Competition.class);
+            Competition competition = modelMapper.map(reqCompetition, Competition.class);
             Competition savedCompetition = repository.save(competition);
             return modelMapper.map(savedCompetition, ResCompetition.class);
         } catch (DataIntegrityViolationException e) {
@@ -68,11 +65,11 @@ public class CompetitionService implements ICompetitionService {
     }
 
     @Override
-    public ResCompetition update(ReqCompetiton reqCompetiton, String code) {
+    public ResCompetition update(ReqCompetition reqCompetition, String code) {
         Optional<Competition> competition = repository.findById(code);
         if (competition.isPresent()) {
-            reqCompetiton.setName(code);
-            Competition createdcompetition = repository.save(modelMapper.map(reqCompetiton, Competition.class));
+            reqCompetition.setCode(code);
+            Competition createdcompetition = repository.save(modelMapper.map(reqCompetition, Competition.class));
             return modelMapper.map(createdcompetition, ResCompetition.class);
         } else throw new CompetitionNotFoundException("No competition was found with code " + code);
     }

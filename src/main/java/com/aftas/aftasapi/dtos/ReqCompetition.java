@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Data
-public class ResCompetition {
+public class ReqCompetition {
     private String code;
     private LocalDate date;
     private LocalTime startTime;
@@ -19,6 +19,4 @@ public class ResCompetition {
     private Integer numberOfParticipants;
     private String location;
     private Double amount;
-    private List<Ranking> rankings;
-    private List<Hunting> hunting;
 }
