@@ -3,6 +3,7 @@ package com.aftas.aftasapi.services.imp;
 import com.aftas.aftasapi.dtos.ReqCompetiton;
 import com.aftas.aftasapi.dtos.ResCompetition;
 import com.aftas.aftasapi.dtos.ResFish;
+import com.aftas.aftasapi.exceptions.CompetitionNotFoundException;
 import com.aftas.aftasapi.exceptions.FishNotFoundException;
 import com.aftas.aftasapi.models.Competition;
 import com.aftas.aftasapi.models.Fish;
@@ -29,7 +30,7 @@ public class CompetitionService implements ICompetitionService {
         if(competition.isPresent()) {
             return modelMapper.map(competition.get(), ResCompetition.class);
         }
-        throw new FishNotFoundException("Competition not found with code " + code);
+        throw new CompetitionNotFoundException("Competition not found with code " + code);
     }
 
     @Override
