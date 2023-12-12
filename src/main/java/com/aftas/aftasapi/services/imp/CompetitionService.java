@@ -2,6 +2,10 @@ package com.aftas.aftasapi.services.imp;
 
 import com.aftas.aftasapi.dtos.ReqCompetiton;
 import com.aftas.aftasapi.dtos.ResCompetition;
+import com.aftas.aftasapi.dtos.ResFish;
+import com.aftas.aftasapi.exceptions.FishNotFoundException;
+import com.aftas.aftasapi.models.Competition;
+import com.aftas.aftasapi.models.Fish;
 import com.aftas.aftasapi.repositories.CompetitionRepository;
 import com.aftas.aftasapi.services.ICompetitionService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +23,11 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public ResCompetition read(String code) {
-        return null;
+        Optional<Competition> competition = repository.findById(code);
+        if(fish.isPresent()) {
+            return modelMapper.map(fish.get(), ResFish.class);
+        }
+        throw new FishNotFoundException("Fish not found with name " + name);
     }
 
     @Override
