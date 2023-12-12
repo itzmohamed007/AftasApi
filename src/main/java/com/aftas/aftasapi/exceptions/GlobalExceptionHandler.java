@@ -48,4 +48,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleMemberNotFoundException(MemberNotFoundException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CompetitionNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleCompetitionNotFoundException(CompetitionNotFoundException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
 }

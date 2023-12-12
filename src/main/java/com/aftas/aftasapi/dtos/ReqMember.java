@@ -13,7 +13,7 @@ import java.util.List;
 
 @Data
 public class ReqMember {
-    private Integer id;
+    private Integer num;
     @NotNull(message = "name cannot be null")
     private String name;
     @NotNull(message = "family name cannot be null")

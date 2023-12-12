@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +35,9 @@ public class FishService implements IFishService {
         Optional<Fish> fish = repository.findById(name);
         if(fish.isPresent()) {
             return modelMapper.map(fish.get(), ResFish.class);
+        } else {
+            throw new FishNotFoundException("Fish not found with name " + name);
         }
-        throw new FishNotFoundException("Fish not found with name " + name);
     }
 
     @Override
@@ -55,17 +57,16 @@ public class FishService implements IFishService {
         if(paginatedFishes.isEmpty()) {
             throw new LevelNotFoundException("No Fishes were found");
         }
-        return repository.findAll(pageable).map(fish -> modelMapper.map(fish, ResFish.class));
+        return paginatedFishes.map(fish -> modelMapper.map(fish, ResFish.class));
     }
 
     @Override
     public ResFish create(ReqFish reqFish) {
-        try {
+        if(isPresent(reqFish.getName())) throw new UniqueConstraintViolationException("Violated unique constraint (name)");
+        else {
             Fish fish = modelMapper.map(reqFish, Fish.class);
             Fish savedFish = repository.save(fish);
             return modelMapper.map(savedFish, ResFish.class);
-        } catch (DataIntegrityViolationException e) {
-            throw new UniqueConstraintViolationException("Violated unique constraint (name)");
         }
     }
 
@@ -85,5 +86,9 @@ public class FishService implements IFishService {
         Optional<Fish> fish = repository.findById(name);
         if (fish.isPresent()) repository.deleteById(name);
         else throw new FishNotFoundException("No fish was found with name " + name);
+    }
+
+    private boolean isPresent(String name) {
+        return repository.findById(name).isPresent();
     }
 }

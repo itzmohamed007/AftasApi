@@ -27,11 +27,11 @@ public class MemberService implements IMemberService {
     private final ModelMapper modelMapper;
 
     @Override
-    public ResMember read(Integer id) {
-        Optional<Member> member = repository.findById(id);
+    public ResMember read(Integer num) {
+        Optional<Member> member = repository.findById(num);
         if(member.isPresent())
             return modelMapper.map(member.get(), ResMember.class);
-        throw new MemberNotFoundException("member not found with id " + id);
+        throw new MemberNotFoundException("member not found with num " + num);
     }
 
     @Override
@@ -66,26 +66,23 @@ public class MemberService implements IMemberService {
     }
 
     @Override
-    public ResMember update(ReqMember reqMember, Integer id) {
-        Optional<Member> level = repository.findById(id);
+    public ResMember update(ReqMember reqMember, Integer num) {
+        Optional<Member> level = repository.findById(num);
         if(level.isPresent()) {
             try {
-                reqMember.setId(id);
+                reqMember.setNum(num);
                 Member insertMember = repository.save(modelMapper.map(reqMember, Member.class));
                 return modelMapper.map(insertMember, ResMember.class);
             } catch (DataIntegrityViolationException e) {
                 throw new UniqueConstraintViolationException("Violated unique constraint (document number)");
             }
-        } else throw new MemberNotFoundException("No member was found with id " + id);
+        } else throw new MemberNotFoundException("No member was found with num " + num);
     }
 
     @Override
-    public void delete(Integer id) {
-        Optional<Member> member = repository.findById(id);
-        if(member.isPresent()) {
-            repository.deleteById(id);
-        } else {
-            throw new MemberNotFoundException("Member not found with id " + id);
-        }
+    public void delete(Integer num) {
+        Optional<Member> member = repository.findById(num);
+        if (member.isPresent()) repository.deleteById(num);
+        else throw new MemberNotFoundException("Member not found with num " + num);
     }
 }
