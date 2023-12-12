@@ -55,7 +55,7 @@ public class FishService implements IFishService {
         if(paginatedFishes.isEmpty()) {
             throw new LevelNotFoundException("No Fishes were found");
         }
-        return repository.findAll(pageable).map(fish -> modelMapper.map(fish, ResFish.class));
+        return paginatedFishes.map(fish -> modelMapper.map(fish, ResFish.class));
     }
 
     @Override
