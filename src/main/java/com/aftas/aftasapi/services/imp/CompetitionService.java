@@ -79,6 +79,8 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public void delete(String code) {
-
+        Optional<Competition> competition = repository.findById(code);
+        if (competition.isPresent()) repository.deleteById(code);
+        else throw new FishNotFoundException("No competition was found with code " + code);
     }
 }
