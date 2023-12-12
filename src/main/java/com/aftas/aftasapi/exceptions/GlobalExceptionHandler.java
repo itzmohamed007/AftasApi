@@ -13,7 +13,6 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -25,33 +24,33 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(UniqueConstraintViolationException.class)
     public ResponseEntity<Map<String, String>> handleUniqueConstraintViolationException(UniqueConstraintViolationException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.CONFLICT);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(LevelNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleLevelNotFoundException(LevelNotFoundException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(FishNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleFishNotFoundException(FishNotFoundException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(MemberNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleMemberNotFoundException(MemberNotFoundException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(CompetitionNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleCompetitionNotFoundException(CompetitionNotFoundException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DuplicatedCodeException.class)
+    public ResponseEntity<Map<String, String>> handleDuplicatedCodeException(DuplicatedCodeException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

@@ -3,11 +3,13 @@ package com.aftas.aftasapi.services.imp;
 import com.aftas.aftasapi.dtos.ReqCompetition;
 import com.aftas.aftasapi.dtos.ResCompetition;
 import com.aftas.aftasapi.exceptions.CompetitionNotFoundException;
+import com.aftas.aftasapi.exceptions.DuplicatedCodeException;
 import com.aftas.aftasapi.exceptions.FishNotFoundException;
 import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
 import com.aftas.aftasapi.models.Competition;
 import com.aftas.aftasapi.repositories.CompetitionRepository;
 import com.aftas.aftasapi.services.ICompetitionService;
+import com.aftas.aftasapi.utilities.CodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -61,13 +63,15 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public ResCompetition create(ReqCompetition reqCompetition) {
-        if(isPresent(reqCompetition.getCode())) throw new UniqueConstraintViolationException("Violated unique constraint (code)");
+        if(checkByDate(reqCompetition.getDate())) throw new DuplicatedCodeException("A competition already exists in date " + reqCompetition.getDate());
         else {
             Competition competition = modelMapper.map(reqCompetition, Competition.class);
 
             competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
             competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
             competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
+
+            competition.setCode(CodeGenerator.generateCompetitionCode(reqCompetition.getLocation(), reqCompetition.getDate()));
 
             Competition savedCompetition = repository.save(competition);
             return modelMapper.map(savedCompetition, ResCompetition.class);
@@ -79,9 +83,9 @@ public class CompetitionService implements ICompetitionService {
         Optional<Competition> dbCompetition = repository.findById(code);
         if (dbCompetition.isPresent()) {
             Competition competition = modelMapper.map(reqCompetition, Competition.class);
-            competition.setCode(code);
 
-            competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
+            competition.setCode(code);
+            competition.setDate(dbCompetition.get().getDate()); // Keeping old date, to prevent code generation bugs
             competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
             competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
 
@@ -99,5 +103,9 @@ public class CompetitionService implements ICompetitionService {
 
     private boolean isPresent(String code) {
         return repository.findById(code).isPresent();
+    }
+
+    private boolean checkByDate(String date) {
+        return repository.getByDate(LocalDate.parse(date, dateFormatter)).isPresent();
     }
 }
