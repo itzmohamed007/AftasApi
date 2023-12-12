@@ -82,10 +82,7 @@ public class MemberService implements IMemberService {
     @Override
     public void delete(Integer id) {
         Optional<Member> member = repository.findById(id);
-        if(member.isPresent()) {
-            repository.deleteById(id);
-        } else {
-            throw new MemberNotFoundException("Member not found with id " + id);
-        }
+        if (member.isPresent()) repository.deleteById(id);
+        else throw new MemberNotFoundException("Member not found with id " + id);
     }
 }
