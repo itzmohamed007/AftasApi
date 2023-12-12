@@ -29,7 +29,7 @@ public class CompetitionController implements GlobalController<ReqCompetition, R
     @Override
     @GetMapping("/all")
     public ResponseEntity<List<ResCompetition>> readAll() {
-        return null;
+        return new ResponseEntity<>(service.readAll(), HttpStatus.OK);
     }
 
     @Override
