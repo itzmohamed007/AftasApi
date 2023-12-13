@@ -2,8 +2,6 @@ package com.aftas.aftasapi.dtos;
 
 import com.aftas.aftasapi.models.Hunting;
 import com.aftas.aftasapi.models.Ranking;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 import java.time.LocalDate;

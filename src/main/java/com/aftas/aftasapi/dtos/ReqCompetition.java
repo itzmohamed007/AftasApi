@@ -1,22 +1,10 @@
 package com.aftas.aftasapi.dtos;
 
-import com.aftas.aftasapi.models.Hunting;
-import com.aftas.aftasapi.models.Ranking;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
 
 @Data
 public class ReqCompetition {

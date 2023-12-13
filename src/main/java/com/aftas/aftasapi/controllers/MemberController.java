@@ -5,7 +5,6 @@ import com.aftas.aftasapi.dtos.ResMember;
 import com.aftas.aftasapi.services.IMemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

@@ -2,27 +2,20 @@ package com.aftas.aftasapi.services.imp;
 
 import com.aftas.aftasapi.dtos.ReqFish;
 import com.aftas.aftasapi.dtos.ResFish;
-import com.aftas.aftasapi.dtos.ResLevel;
-import com.aftas.aftasapi.dtos.ResMember;
 import com.aftas.aftasapi.exceptions.FishNotFoundException;
 import com.aftas.aftasapi.exceptions.LevelNotFoundException;
 import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
 import com.aftas.aftasapi.models.Fish;
-import com.aftas.aftasapi.models.Level;
-import com.aftas.aftasapi.models.Member;
 import com.aftas.aftasapi.repositories.FishRepository;
 import com.aftas.aftasapi.services.IFishService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 @Service
 @RequiredArgsConstructor
