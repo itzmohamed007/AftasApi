@@ -69,7 +69,6 @@ public class MemberService implements IMemberService {
         }
     }
 
-
     @Override
     public ResMember update(ReqMember reqMember, Integer num) {
         Optional<Member> level = repository.findById(num);

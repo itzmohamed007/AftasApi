@@ -66,12 +66,19 @@ public class RankingService implements IRankingService {
     }
 
     @Override
-    public ResRanking update(ReqRanking reqRanking, RankingId id) {
-        return null;
+    public ResRanking update(ReqRanking reqRanking, RankingId rankingId) {
+        Optional<Ranking> ranking = repository.findById(rankingId);
+        if (ranking.isPresent()) {
+            Ranking createdRanked = repository.save(modelMapper.map(reqRanking, Ranking.class));
+            return modelMapper.map(createdRanked, ResRanking.class);
+        }
+        throw new RankingNotFoundException("No ranking was found with id " + rankingId);
     }
 
     @Override
     public void delete(RankingId rankingId) {
-
+        Optional<Ranking> ranking = repository.findById(rankingId);
+        if (ranking.isPresent()) repository.deleteById(rankingId);
+        else throw new RankingNotFoundException("No ranking was found with id " + rankingId);
     }
 }
