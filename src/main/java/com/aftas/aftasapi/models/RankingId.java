@@ -2,10 +2,14 @@ package com.aftas.aftasapi.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Embeddable
+@AllArgsConstructor
+@NoArgsConstructor
 public class RankingId implements Serializable {
     @Column(name = "competition_code")
     private String competitionCode;

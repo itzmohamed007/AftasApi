@@ -63,4 +63,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleDocumentTypeViolationException(DocumentTypeViolationException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TimeExceededException.class)
+    public ResponseEntity<Map<String, String>> handleTimeExceededException(TimeExceededException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 }

@@ -1,0 +1,5 @@
+package com.aftas.aftasapi.exceptions;
+
+public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String message) {super(message);}
+}

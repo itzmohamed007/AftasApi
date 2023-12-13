@@ -2,6 +2,7 @@ package com.aftas.aftasapi.dtos;
 
 import com.aftas.aftasapi.models.Hunting;
 import com.aftas.aftasapi.models.Ranking;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -17,6 +18,8 @@ public class ResCompetition {
     private Integer numberOfParticipants;
     private String location;
     private Double amount;
+    @JsonIgnore
     private List<Ranking> rankings;
+    @JsonIgnore
     private List<Hunting> hunting;
 }

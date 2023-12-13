@@ -56,11 +56,9 @@ public class FishService implements IFishService {
     @Override
     public ResFish create(ReqFish reqFish) {
         if(isPresent(reqFish.getName())) throw new UniqueConstraintViolationException("Violated unique constraint (name)");
-        else {
-            Fish fish = modelMapper.map(reqFish, Fish.class);
-            Fish savedFish = repository.save(fish);
-            return modelMapper.map(savedFish, ResFish.class);
-        }
+        Fish fish = modelMapper.map(reqFish, Fish.class);
+        Fish savedFish = repository.save(fish);
+        return modelMapper.map(savedFish, ResFish.class);
     }
 
     @Override
