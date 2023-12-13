@@ -1,12 +1,9 @@
 package com.aftas.aftasapi.services.imp;
 
 import com.aftas.aftasapi.dtos.ReqMember;
-import com.aftas.aftasapi.dtos.ResLevel;
 import com.aftas.aftasapi.dtos.ResMember;
-import com.aftas.aftasapi.exceptions.LevelNotFoundException;
 import com.aftas.aftasapi.exceptions.MemberNotFoundException;
 import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
-import com.aftas.aftasapi.models.Level;
 import com.aftas.aftasapi.models.Member;
 import com.aftas.aftasapi.repositories.MemberRepository;
 import com.aftas.aftasapi.services.IMemberService;

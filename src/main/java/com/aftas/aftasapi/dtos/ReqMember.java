@@ -1,15 +1,10 @@
 package com.aftas.aftasapi.dtos;
 
 import com.aftas.aftasapi.enums.IdentityDocumentType;
-import com.aftas.aftasapi.models.Hunting;
-import com.aftas.aftasapi.models.Ranking;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 public class ReqMember {

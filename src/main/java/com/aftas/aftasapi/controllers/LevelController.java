@@ -2,8 +2,6 @@ package com.aftas.aftasapi.controllers;
 
 import com.aftas.aftasapi.dtos.ReqLevel;
 import com.aftas.aftasapi.dtos.ResLevel;
-import com.aftas.aftasapi.models.Level;
-import com.aftas.aftasapi.repositories.LevelRepository;
 import com.aftas.aftasapi.services.ILevelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

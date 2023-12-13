@@ -5,14 +5,12 @@ import com.aftas.aftasapi.dtos.ResCompetition;
 import com.aftas.aftasapi.exceptions.CompetitionNotFoundException;
 import com.aftas.aftasapi.exceptions.DuplicatedCodeException;
 import com.aftas.aftasapi.exceptions.FishNotFoundException;
-import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
 import com.aftas.aftasapi.models.Competition;
 import com.aftas.aftasapi.repositories.CompetitionRepository;
 import com.aftas.aftasapi.services.ICompetitionService;
 import com.aftas.aftasapi.utilities.CodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -99,10 +97,6 @@ public class CompetitionService implements ICompetitionService {
         Optional<Competition> competition = repository.findById(code);
         if (competition.isPresent()) repository.deleteById(code);
         else throw new FishNotFoundException("No competition was found with code " + code);
-    }
-
-    private boolean isPresent(String code) {
-        return repository.findById(code).isPresent();
     }
 
     private boolean checkByDate(String date) {
