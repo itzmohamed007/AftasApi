@@ -52,4 +52,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleDuplicatedCodeException(DuplicatedCodeException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(RankingNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleRankingNotFoundException(RankingNotFoundException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
 }
