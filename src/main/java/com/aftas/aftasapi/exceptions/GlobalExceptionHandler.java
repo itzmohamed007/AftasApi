@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.swing.text.Document;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,5 +57,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RankingNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleRankingNotFoundException(RankingNotFoundException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DocumentTypeViolationException.class)
+    public ResponseEntity<Map<String, String>> handleDocumentTypeViolationException(DocumentTypeViolationException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }
