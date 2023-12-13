@@ -4,6 +4,9 @@ import com.aftas.aftasapi.dtos.ReqRanking;
 import com.aftas.aftasapi.dtos.ResFish;
 import com.aftas.aftasapi.dtos.ResRanking;
 import com.aftas.aftasapi.exceptions.FishNotFoundException;
+import com.aftas.aftasapi.exceptions.LevelNotFoundException;
+import com.aftas.aftasapi.exceptions.RankingNotFoundException;
+import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
 import com.aftas.aftasapi.models.Fish;
 import com.aftas.aftasapi.models.Ranking;
 import com.aftas.aftasapi.models.RankingId;
@@ -37,17 +40,29 @@ public class RankingService implements IRankingService {
 
     @Override
     public List<ResRanking> readAll() {
-        return null;
+        List<ResRanking> rankings = repository.findAll().stream()
+                .map(ranking -> modelMapper.map(ranking, ResRanking.class))
+                .toList();
+        if(rankings.isEmpty()) {
+            throw new RankingNotFoundException("No Rankings were found");
+        }
+        return rankings;
     }
 
     @Override
     public Page<ResRanking> readAllPaginated(Pageable pageable) {
-        return null;
+        Page<Ranking> paginatedRankings = repository.findAll(pageable);
+        if(paginatedRankings.isEmpty()) {
+            throw new RankingNotFoundException("No Rankings were found");
+        }
+        return paginatedRankings.map(ranking -> modelMapper.map(ranking, ResRanking.class));
     }
 
     @Override
     public ResRanking create(ReqRanking reqRanking) {
-        return null;
+        Ranking ranking = modelMapper.map(reqRanking, Ranking.class);
+        Ranking savedRanking = repository.save(ranking);
+        return modelMapper.map(savedRanking, ResRanking.class);
     }
 
     @Override
