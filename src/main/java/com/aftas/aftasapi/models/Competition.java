@@ -17,6 +17,7 @@ public class Competition {
     @Id
     @Column(unique = true, nullable = false)
     private String code;
+    @Column(unique = true, nullable = false)
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
