@@ -101,10 +101,6 @@ public class CompetitionService implements ICompetitionService {
         else throw new FishNotFoundException("No competition was found with code " + code);
     }
 
-    private boolean isPresent(String code) {
-        return repository.findById(code).isPresent();
-    }
-
     private boolean checkByDate(String date) {
         return repository.getByDate(LocalDate.parse(date, dateFormatter)).isPresent();
     }
