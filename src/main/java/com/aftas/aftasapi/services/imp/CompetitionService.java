@@ -11,6 +11,7 @@ import com.aftas.aftasapi.services.ICompetitionService;
 import com.aftas.aftasapi.utilities.CodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -61,8 +62,7 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public ResCompetition create(ReqCompetition reqCompetition) {
-        if(checkByDate(reqCompetition.getDate())) throw new DuplicatedCodeException("A competition already exists in date " + reqCompetition.getDate());
-        else {
+        try {
             Competition competition = modelMapper.map(reqCompetition, Competition.class);
 
             competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
@@ -73,6 +73,8 @@ public class CompetitionService implements ICompetitionService {
 
             Competition savedCompetition = repository.save(competition);
             return modelMapper.map(savedCompetition, ResCompetition.class);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicatedCodeException("A competition already exists in date " + reqCompetition.getDate());
         }
     }
 
