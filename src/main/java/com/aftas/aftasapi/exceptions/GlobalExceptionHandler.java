@@ -73,4 +73,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleTimeExceededException(TimeExceededException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(IllegalActionException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalActionException(IllegalActionException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 }

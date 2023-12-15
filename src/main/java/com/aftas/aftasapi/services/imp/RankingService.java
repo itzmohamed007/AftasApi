@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.SqlInOutParameter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -34,7 +35,7 @@ public class RankingService implements IRankingService {
     @Override
     public ResRanking read(RankingId rankingId) {
         Optional<Ranking> ranking = repository.findById(rankingId);
-        if(ranking.isPresent()) {
+        if (ranking.isPresent()) {
             return modelMapper.map(ranking.get(), ResRanking.class);
         } else {
             throw new FishNotFoundException("Ranking not found with id " + rankingId);
@@ -46,7 +47,7 @@ public class RankingService implements IRankingService {
         List<ResRanking> rankings = repository.findAll().stream()
                 .map(ranking -> modelMapper.map(ranking, ResRanking.class))
                 .toList();
-        if(rankings.isEmpty()) {
+        if (rankings.isEmpty()) {
             throw new RankingNotFoundException("No Rankings were found");
         }
         return rankings;
@@ -55,7 +56,7 @@ public class RankingService implements IRankingService {
     @Override
     public Page<ResRanking> readAllPaginated(Pageable pageable) {
         Page<Ranking> paginatedRankings = repository.findAll(pageable);
-        if(paginatedRankings.isEmpty()) {
+        if (paginatedRankings.isEmpty()) {
             throw new RankingNotFoundException("No Rankings were found");
         }
         return paginatedRankings.map(ranking -> modelMapper.map(ranking, ResRanking.class));
@@ -99,27 +100,20 @@ public class RankingService implements IRankingService {
         RankingId rankingId = new RankingId(reqRanking.getCompetition(), reqRanking.getMember());
 
         // Check 2: check if member is already present in competition
-        if (repository.existsById(rankingId)) {
-            throw new UniqueConstraintViolationException("Member already exists in this competition");
-        }
+        if (repository.existsById(rankingId)) throw new UniqueConstraintViolationException("Member already exists in this competition");
 
-        // Check 3: check for 24 hours exception
-        long hoursUntilCompetitionStart = ChronoUnit.HOURS.between(LocalTime.now(), competition.getStartTime());
-
-        if (hoursUntilCompetitionStart <= 24) {
-            throw new TimeExceededException("Surpassed available time to register member to this competition by " + hoursUntilCompetitionStart + " hours");
-        }
-
-        // Check 4: check for 1 day exception
+        // Check 3: check for 1 day exception
         long daysUntilCompetitionStart = ChronoUnit.DAYS.between(LocalDate.now(), competition.getDate());
 
-        if (daysUntilCompetitionStart <= 1) {
-            throw new TimeExceededException("Surpassed available time to register member to this competition by " + daysUntilCompetitionStart + " days");
-        }
+        if (daysUntilCompetitionStart == 1) throw new TimeExceededException("Cannot assign member to a competition before 24 hours");
+        else if(daysUntilCompetitionStart < 1) throw new TimeExceededException("Competition has finished " + -daysUntilCompetitionStart + " days ago");
+
+        // Check 4: check if competition is full already
+        int membersCount = competitionRepository.getMembersCount(competition.getCode());
+        if (membersCount >= competition.getNumberOfParticipants()) throw new IllegalActionException("Competition is already full");
 
         // Creating new ranking record
         Ranking ranking = new Ranking(rankingId, reqRanking.getRank(), reqRanking.getScore(), member, competition);
-
         Ranking savedRanking = repository.save(ranking);
         return modelMapper.map(savedRanking, ResRanking.class);
     }

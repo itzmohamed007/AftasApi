@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -62,18 +63,17 @@ public class CompetitionService implements ICompetitionService {
     @Override
     public ResCompetition create(ReqCompetition reqCompetition) {
         if(checkByDate(reqCompetition.getDate())) throw new DuplicatedCodeException("A competition already exists in date " + reqCompetition.getDate());
-        else {
-            Competition competition = modelMapper.map(reqCompetition, Competition.class);
 
-            competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
-            competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
-            competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
+        Competition competition = modelMapper.map(reqCompetition, Competition.class);
 
-            competition.setCode(CodeGenerator.generateCompetitionCode(reqCompetition.getLocation(), reqCompetition.getDate()));
+        competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
+        competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
+        competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
 
-            Competition savedCompetition = repository.save(competition);
-            return modelMapper.map(savedCompetition, ResCompetition.class);
-        }
+        competition.setCode(CodeGenerator.generateCompetitionCode(reqCompetition.getLocation(), reqCompetition.getDate()));
+
+        Competition savedCompetition = repository.save(competition);
+        return modelMapper.map(savedCompetition, ResCompetition.class);
     }
 
     @Override
