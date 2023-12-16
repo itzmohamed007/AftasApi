@@ -2,10 +2,7 @@ package com.aftas.aftasapi.services.imp;
 
 import com.aftas.aftasapi.dtos.ReqCompetition;
 import com.aftas.aftasapi.dtos.ResCompetition;
-import com.aftas.aftasapi.exceptions.BadRequestException;
-import com.aftas.aftasapi.exceptions.CompetitionNotFoundException;
-import com.aftas.aftasapi.exceptions.DuplicatedCodeException;
-import com.aftas.aftasapi.exceptions.FishNotFoundException;
+import com.aftas.aftasapi.exceptions.*;
 import com.aftas.aftasapi.models.Competition;
 import com.aftas.aftasapi.repositories.CompetitionRepository;
 import com.aftas.aftasapi.services.ICompetitionService;
@@ -16,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -68,10 +66,7 @@ public class CompetitionService implements ICompetitionService {
         Competition competition = modelMapper.map(reqCompetition, Competition.class);
 
         competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
-        competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
-        competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
-
-        if(LocalDate.now().isAfter(competition.getDate())) throw new BadRequestException("Cannot create a competition in the past");
+        parseAndCheckDates(reqCompetition, competition);
 
         competition.setCode(CodeGenerator.generateCompetitionCode(reqCompetition.getLocation(), reqCompetition.getDate()));
 
@@ -87,8 +82,7 @@ public class CompetitionService implements ICompetitionService {
 
             competition.setCode(code);
             competition.setDate(dbCompetition.get().getDate()); // Keeping old date, to prevent code generation bugs
-            competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
-            competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
+            parseAndCheckDates(reqCompetition, competition);
 
             Competition createdcompetition = repository.save(competition);
             return modelMapper.map(createdcompetition, ResCompetition.class);
@@ -103,6 +97,19 @@ public class CompetitionService implements ICompetitionService {
     }
 
     private boolean checkByDate(String date) {
-        return repository.getByDate(LocalDate.parse(date, dateFormatter)).isPresent();
+        try {
+            LocalDate parsedDate = LocalDate.parse(date, dateFormatter);
+            return repository.getByDate(parsedDate).isPresent();
+        } catch (DateTimeException e) { throw new IllegalActionException("Unacceptable date/time format"); }
+    }
+
+    private void parseAndCheckDates(ReqCompetition reqCompetition, Competition competition) {
+        try {
+            competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
+            competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
+
+            if(LocalDate.now().isAfter(competition.getDate())) throw new BadRequestException("Cannot create a competition in the past");
+            if(competition.getStartTime().isAfter(competition.getEndTime())) throw new BadRequestException("Start time cannot be past end time");
+        } catch (DateTimeException e) { throw new IllegalActionException("Unacceptable date/time format"); }
     }
 }
