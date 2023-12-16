@@ -23,8 +23,8 @@ public class RankingController implements GlobalController<ReqRanking, ResRankin
     private final IRankingService service;
 
     @Override
-    @GetMapping("/{id}")
-    public ResponseEntity<ResRanking> read(@PathVariable RankingId id) {
+    @PostMapping("/find")
+    public ResponseEntity<ResRanking> read(@RequestBody @Valid RankingId id) {
         return new ResponseEntity<>(service.read(id), HttpStatus.OK);
     }
 
@@ -42,7 +42,7 @@ public class RankingController implements GlobalController<ReqRanking, ResRankin
 
     @Override
     @PostMapping
-    public ResponseEntity<ResRanking> create(@RequestBody ReqRanking reqRanking) {
+    public ResponseEntity<ResRanking> create(@RequestBody @Valid ReqRanking reqRanking) {
         return new ResponseEntity<>(service.create(reqRanking), HttpStatus.CREATED);
     }
 

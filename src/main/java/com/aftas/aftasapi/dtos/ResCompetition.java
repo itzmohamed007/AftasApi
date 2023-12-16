@@ -1,5 +1,6 @@
 package com.aftas.aftasapi.dtos;
 
+import com.aftas.aftasapi.dtos.competitions.CompetitionRanking;
 import com.aftas.aftasapi.models.Hunting;
 import com.aftas.aftasapi.models.Ranking;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,8 +19,5 @@ public class ResCompetition {
     private Integer numberOfParticipants;
     private String location;
     private Double amount;
-    @JsonIgnore
-    private List<Ranking> rankings;
-    @JsonIgnore
-    private List<Hunting> hunting;
+    private List<CompetitionRanking> rankings;
 }

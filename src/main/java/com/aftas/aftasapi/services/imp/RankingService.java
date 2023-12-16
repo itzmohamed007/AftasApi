@@ -86,7 +86,7 @@ public class RankingService implements IRankingService {
         if (membersCount >= competition.getNumberOfParticipants()) throw new IllegalActionException("Competition is already full");
 
         // Creating new ranking record
-        Ranking ranking = new Ranking(rankingId, reqRanking.getRank(), reqRanking.getScore(), member, competition);
+        Ranking ranking = new Ranking(rankingId, 0, 0, member, competition);
         Ranking savedRanking = repository.save(ranking);
         return modelMapper.map(savedRanking, ResRanking.class);
     }
