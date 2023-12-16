@@ -2,10 +2,7 @@ package com.aftas.aftasapi.services.imp;
 
 import com.aftas.aftasapi.dtos.ReqCompetition;
 import com.aftas.aftasapi.dtos.ResCompetition;
-import com.aftas.aftasapi.exceptions.BadRequestException;
-import com.aftas.aftasapi.exceptions.CompetitionNotFoundException;
-import com.aftas.aftasapi.exceptions.DuplicatedCodeException;
-import com.aftas.aftasapi.exceptions.FishNotFoundException;
+import com.aftas.aftasapi.exceptions.*;
 import com.aftas.aftasapi.models.Competition;
 import com.aftas.aftasapi.repositories.CompetitionRepository;
 import com.aftas.aftasapi.services.ICompetitionService;
@@ -17,12 +14,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,21 +44,43 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public List<ResCompetition> readAll() {
-        List<ResCompetition> competitions = repository.findAll().stream()
-                .map(competition -> modelMapper.map(competition, ResCompetition.class))
-                .toList();
-        if(competitions.isEmpty()) {
-            throw new CompetitionNotFoundException("No competitions were found");
-        }
-        return competitions;
+        return null;
     }
 
     @Override
     public Page<ResCompetition> readAllPaginated(Pageable pageable) {
-        Page<Competition> paginatedCompetitions = repository.findAll(pageable);
-        if(paginatedCompetitions.isEmpty()) {
-            throw new CompetitionNotFoundException("No Competitions were found");
-        }
+        return null;
+    }
+
+    @Override
+    public List<ResCompetition> readAllFiltered(String filter) {
+        List<Competition> competitions = repository.findAll();
+        List<Competition> filteredCompetitions;
+        filter = Objects.requireNonNullElse(filter, ""); // solve NullPointerException caused by .equals()
+
+        if(filter.equals("ongoing"))
+            filteredCompetitions = competitions.stream().filter(competition -> Objects.equals(competition.getDate(), LocalDate.now())).toList();
+        else if(filter.equals("finished"))
+            filteredCompetitions = competitions.stream().filter(competition -> competition.getDate().isBefore(LocalDate.now())).toList();
+        else filteredCompetitions = competitions;
+
+        if (filteredCompetitions.isEmpty()) throw new CompetitionNotFoundException("No competitions were found");
+
+        return filteredCompetitions.stream()
+                .map(competition -> modelMapper.map(competition, ResCompetition.class))
+                .toList();
+    }
+
+    @Override
+    public Page<ResCompetition> readAllFilteredPaginated(Pageable pageable, String filter) {
+        Page<Competition> paginatedCompetitions;
+        filter = Objects.requireNonNullElse(filter, ""); // solve NullPointerException caused by .equals()
+
+        if(filter.equals("ongoing")) paginatedCompetitions = repository.findAllByDate(LocalDate.now(), pageable);
+        else if(filter.equals("finished")) paginatedCompetitions = repository.findAllByDateBefore(LocalDate.now(), pageable);
+        else paginatedCompetitions = repository.findAll(pageable);
+
+        if(paginatedCompetitions.isEmpty()) throw new CompetitionNotFoundException("No Competitions were found");
         return paginatedCompetitions.map(competition -> modelMapper.map(competition, ResCompetition.class));
     }
 
@@ -69,10 +91,7 @@ public class CompetitionService implements ICompetitionService {
         Competition competition = modelMapper.map(reqCompetition, Competition.class);
 
         competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
-        competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
-        competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
-
-        if(LocalDate.now().isAfter(competition.getDate())) throw new BadRequestException("Cannot create a competition in the past");
+        parseAndCheckDates(reqCompetition, competition);
 
         competition.setCode(CodeGenerator.generateCompetitionCode(reqCompetition.getLocation(), reqCompetition.getDate()));
 
@@ -88,8 +107,7 @@ public class CompetitionService implements ICompetitionService {
 
             competition.setCode(code);
             competition.setDate(dbCompetition.get().getDate()); // Keeping old date, to prevent code generation bugs
-            competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
-            competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
+            parseAndCheckDates(reqCompetition, competition);
 
             Competition createdcompetition = repository.save(competition);
             return modelMapper.map(createdcompetition, ResCompetition.class);
@@ -104,6 +122,19 @@ public class CompetitionService implements ICompetitionService {
     }
 
     private boolean checkByDate(String date) {
-        return repository.getByDate(LocalDate.parse(date, dateFormatter)).isPresent();
+        try {
+            LocalDate parsedDate = LocalDate.parse(date, dateFormatter);
+            return repository.getByDate(parsedDate).isPresent();
+        } catch (DateTimeException e) { throw new IllegalActionException("Unacceptable date/time format"); }
+    }
+
+    private void parseAndCheckDates(ReqCompetition reqCompetition, Competition competition) {
+        try {
+            competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
+            competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
+
+            if(LocalDate.now().isAfter(competition.getDate())) throw new BadRequestException("Cannot create a competition in the past");
+            if(competition.getStartTime().isAfter(competition.getEndTime())) throw new BadRequestException("Start time cannot be past end time");
+        } catch (DateTimeException e) { throw new IllegalActionException("Unacceptable date/time format"); }
     }
 }

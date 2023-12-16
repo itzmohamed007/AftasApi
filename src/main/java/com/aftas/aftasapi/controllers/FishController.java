@@ -1,5 +1,6 @@
 package com.aftas.aftasapi.controllers;
 
+import com.aftas.aftasapi.controllers.interfaces.GlobalController;
 import com.aftas.aftasapi.dtos.ReqFish;
 import com.aftas.aftasapi.dtos.ResFish;
 import com.aftas.aftasapi.services.imp.FishService;

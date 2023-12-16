@@ -1,5 +1,7 @@
 package com.aftas.aftasapi.controllers;
 
+import com.aftas.aftasapi.controllers.interfaces.GlobalController;
+import com.aftas.aftasapi.controllers.interfaces.ICompetitionController;
 import com.aftas.aftasapi.dtos.ReqCompetition;
 import com.aftas.aftasapi.dtos.ResCompetition;
 import com.aftas.aftasapi.services.ICompetitionService;
@@ -17,7 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/competitions")
 @RequiredArgsConstructor
-public class CompetitionController implements GlobalController<ReqCompetition, ResCompetition, String> {
+public class CompetitionController implements ICompetitionController<ReqCompetition, ResCompetition, String> {
     private final ICompetitionService service;
 
     @Override
@@ -28,14 +30,13 @@ public class CompetitionController implements GlobalController<ReqCompetition, R
 
     @Override
     @GetMapping("/all")
-    public ResponseEntity<List<ResCompetition>> readAll() {
-        return new ResponseEntity<>(service.readAll(), HttpStatus.OK);
+    public ResponseEntity<List<ResCompetition>> readAll(@RequestParam(name = "filter", required = false) String filter) {
+        return new ResponseEntity<>(service.readAllFiltered(filter), HttpStatus.OK);
     }
 
-    @Override
     @GetMapping
-    public ResponseEntity<Page<ResCompetition>> readAllPaginated(Pageable pageable) {
-        return new ResponseEntity<>(service.readAllPaginated(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<ResCompetition>> readAllPaginated(@RequestParam(name = "filter", required = false) String filter, Pageable pageable) {
+        return new ResponseEntity<>(service.readAllFilteredPaginated(pageable, filter), HttpStatus.OK);
     }
 
     @Override

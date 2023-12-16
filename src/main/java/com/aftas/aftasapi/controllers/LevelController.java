@@ -1,5 +1,6 @@
 package com.aftas.aftasapi.controllers;
 
+import com.aftas.aftasapi.controllers.interfaces.GlobalController;
 import com.aftas.aftasapi.dtos.ReqLevel;
 import com.aftas.aftasapi.dtos.ResLevel;
 import com.aftas.aftasapi.services.ILevelService;

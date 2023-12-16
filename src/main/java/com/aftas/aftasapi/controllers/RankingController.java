@@ -1,10 +1,10 @@
 package com.aftas.aftasapi.controllers;
 
+import com.aftas.aftasapi.controllers.interfaces.GlobalController;
 import com.aftas.aftasapi.dtos.ReqRanking;
 import com.aftas.aftasapi.dtos.ResRanking;
 import com.aftas.aftasapi.models.RankingId;
 import com.aftas.aftasapi.services.IRankingService;
-import com.aftas.aftasapi.services.imp.RankingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
