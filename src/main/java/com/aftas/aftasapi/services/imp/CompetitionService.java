@@ -12,6 +12,7 @@ import com.aftas.aftasapi.services.ICompetitionService;
 import com.aftas.aftasapi.utilities.CodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
