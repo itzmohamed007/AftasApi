@@ -79,7 +79,7 @@ public class RankingService implements IRankingService {
         long daysUntilCompetitionStart = ChronoUnit.DAYS.between(LocalDate.now(), competition.getDate());
 
         if (daysUntilCompetitionStart == 1) throw new TimeExceededException("Cannot assign member to a competition before 24 hours");
-        else if(daysUntilCompetitionStart < 1) throw new TimeExceededException("Competition has finished " + -daysUntilCompetitionStart + " days ago");
+        else if(daysUntilCompetitionStart < 0) throw new TimeExceededException("Competition has finished " + -daysUntilCompetitionStart + " days ago");
 
         // Check 4: check if competition is full already
         int membersCount = competitionRepository.getMembersCount(competition.getCode());

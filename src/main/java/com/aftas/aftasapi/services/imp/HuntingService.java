@@ -71,7 +71,7 @@ public class HuntingService implements IHuntingService {
             throw new IllegalActionException("You cannot add new hunts to a competition that had already ended.");
 
         if (reqHunting.getFishWeight() <= fish.getAverageWeight())
-            throw new IllegalActionException("The weight of " + fish.getName() + " hunted fish must be at least equal to " + fish.getAverageWeight() + "Kg.");
+            throw new IllegalActionException("The weight of " + fish.getName() + " fish must be at least equal to " + fish.getAverageWeight() + "g.");
 
         RankingId rankingId = new RankingId(competition.getCode(), member.getNum());
         Ranking ranking = rankingRepository.findById(rankingId)
@@ -92,6 +92,7 @@ public class HuntingService implements IHuntingService {
             hunting.setFish(fish);
             hunting.setMember(member);
             hunting.setCompetition(competition);
+            hunting.setNumberOfFish(1);
         }
 
         huntingRepository.save(hunting);

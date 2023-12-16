@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/hunts")
+@RequestMapping("/api/hunts")
 @RequiredArgsConstructor
 public class HuntingController implements GlobalController<ReqHunting, ResHunting, Integer> {
     private final HuntingService service;
@@ -39,7 +39,7 @@ public class HuntingController implements GlobalController<ReqHunting, ResHuntin
     @Override
     @PostMapping
     public ResponseEntity<ResHunting> create(@Valid @RequestBody ReqHunting reqHunting) {
-        return null;
+        return new ResponseEntity<>(service.create(reqHunting), HttpStatus.CREATED);
     }
 
     @Override
