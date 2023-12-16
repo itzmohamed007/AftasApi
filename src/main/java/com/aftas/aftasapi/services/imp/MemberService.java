@@ -2,16 +2,20 @@ package com.aftas.aftasapi.services.imp;
 
 import com.aftas.aftasapi.dtos.ReqMember;
 import com.aftas.aftasapi.dtos.ResMember;
+import com.aftas.aftasapi.enums.IdentityDocumentType;
+import com.aftas.aftasapi.exceptions.DocumentTypeViolationException;
 import com.aftas.aftasapi.exceptions.MemberNotFoundException;
 import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
 import com.aftas.aftasapi.models.Member;
 import com.aftas.aftasapi.repositories.MemberRepository;
 import com.aftas.aftasapi.services.IMemberService;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,10 +59,13 @@ public class MemberService implements IMemberService {
     public ResMember create(ReqMember reqMember) {
         try {
             Member member = modelMapper.map(reqMember, Member.class);
+            member.setIdentityDocument(IdentityDocumentType.valueOf(reqMember.getIdentityDocument()));
             Member savedMember = repository.save(member);
             return modelMapper.map(savedMember, ResMember.class);
         } catch (DataIntegrityViolationException e) {
             throw new UniqueConstraintViolationException("Violated unique constraint (document number)");
+        } catch ( IllegalArgumentException e) {
+            throw new DocumentTypeViolationException("Violated available documents types [CIN, RESIDENCE_CARD, PASSPORT]");
         }
     }
 

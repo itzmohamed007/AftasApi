@@ -2,6 +2,7 @@ package com.aftas.aftasapi.services.imp;
 
 import com.aftas.aftasapi.dtos.ReqCompetition;
 import com.aftas.aftasapi.dtos.ResCompetition;
+import com.aftas.aftasapi.exceptions.BadRequestException;
 import com.aftas.aftasapi.exceptions.CompetitionNotFoundException;
 import com.aftas.aftasapi.exceptions.DuplicatedCodeException;
 import com.aftas.aftasapi.exceptions.FishNotFoundException;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -62,20 +64,20 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public ResCompetition create(ReqCompetition reqCompetition) {
-        try {
-            Competition competition = modelMapper.map(reqCompetition, Competition.class);
+        if(checkByDate(reqCompetition.getDate())) throw new DuplicatedCodeException("A competition already exists in date " + reqCompetition.getDate());
 
-            competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
-            competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
-            competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
+        Competition competition = modelMapper.map(reqCompetition, Competition.class);
 
-            competition.setCode(CodeGenerator.generateCompetitionCode(reqCompetition.getLocation(), reqCompetition.getDate()));
+        competition.setDate(LocalDate.parse(reqCompetition.getDate(), dateFormatter));
+        competition.setStartTime(LocalTime.parse(reqCompetition.getStartTime(), timeFormatter));
+        competition.setEndTime(LocalTime.parse(reqCompetition.getEndTime(), timeFormatter));
 
-            Competition savedCompetition = repository.save(competition);
-            return modelMapper.map(savedCompetition, ResCompetition.class);
-        } catch (DataIntegrityViolationException e) {
-            throw new DuplicatedCodeException("A competition already exists in date " + reqCompetition.getDate());
-        }
+        if(LocalDate.now().isAfter(competition.getDate())) throw new BadRequestException("Cannot create a competition in the past");
+
+        competition.setCode(CodeGenerator.generateCompetitionCode(reqCompetition.getLocation(), reqCompetition.getDate()));
+
+        Competition savedCompetition = repository.save(competition);
+        return modelMapper.map(savedCompetition, ResCompetition.class);
     }
 
     @Override

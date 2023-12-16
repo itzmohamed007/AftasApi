@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.swing.text.Document;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +51,36 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicatedCodeException.class)
     public ResponseEntity<Map<String, String>> handleDuplicatedCodeException(DuplicatedCodeException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RankingNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleRankingNotFoundException(RankingNotFoundException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DocumentTypeViolationException.class)
+    public ResponseEntity<Map<String, String>> handleDocumentTypeViolationException(DocumentTypeViolationException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TimeExceededException.class)
+    public ResponseEntity<Map<String, String>> handleTimeExceededException(TimeExceededException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalActionException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalActionException(IllegalActionException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Map<String, String>> handleBadRequestException(BadRequestException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

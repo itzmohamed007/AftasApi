@@ -10,7 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity 
 public class Ranking {
     @EmbeddedId
     private RankingId id;

@@ -22,7 +22,7 @@ public class CompetitionController implements GlobalController<ReqCompetition, R
 
     @Override
     @GetMapping("/{code}")
-    public ResponseEntity<ResCompetition> read(@PathVariable String code) {
+    public ResponseEntity<ResCompetition> read(@PathVariable final String code) {
         return new ResponseEntity<>(service.read(code), HttpStatus.OK);
     }
 

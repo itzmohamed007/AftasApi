@@ -19,5 +19,5 @@ public class ReqMember {
     @NotNull(message = "identity number cannot be null")
     private String identityNumber;
     @NotNull(message = "identity document type cannot be null")
-    private IdentityDocumentType identityDocument;
+    private String identityDocument;
 }

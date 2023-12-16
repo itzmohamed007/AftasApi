@@ -15,6 +15,7 @@ public class Hunting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(columnDefinition = "INT DEFAULT 1", nullable = false)
     private Integer numberOfFish;
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
