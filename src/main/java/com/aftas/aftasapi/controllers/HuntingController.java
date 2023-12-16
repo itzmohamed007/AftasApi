@@ -1,5 +1,6 @@
 package com.aftas.aftasapi.controllers;
 
+import com.aftas.aftasapi.controllers.interfaces.GlobalController;
 import com.aftas.aftasapi.dtos.ReqHunting;
 import com.aftas.aftasapi.dtos.ResHunting;
 import com.aftas.aftasapi.services.imp.HuntingService;

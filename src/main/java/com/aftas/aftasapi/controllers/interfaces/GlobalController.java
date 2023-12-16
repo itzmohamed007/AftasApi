@@ -1,4 +1,4 @@
-package com.aftas.aftasapi.controllers;
+package com.aftas.aftasapi.controllers.interfaces;
 
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -14,10 +14,10 @@ import java.util.Map;
 // Y => response dto
 // Z => primary key type
 public interface GlobalController<X, Y, Z> {
-    public ResponseEntity<Y> read(@PathVariable Z z);
+    public ResponseEntity<Y> read(Z z);
     public ResponseEntity<List<Y>> readAll();
     public ResponseEntity<Page<Y>> readAllPaginated(Pageable pageable);
-    public ResponseEntity<Y> create(@Valid @RequestBody X x);
+    public ResponseEntity<Y> create(X x);
     public ResponseEntity<Y> update(X x, Z z);
-    public ResponseEntity<Map<String, String>> delete(@PathVariable Z z);
+    public ResponseEntity<Map<String, String>> delete(Z z);
 }

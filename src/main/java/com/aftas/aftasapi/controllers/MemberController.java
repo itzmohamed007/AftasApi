@@ -1,5 +1,6 @@
 package com.aftas.aftasapi.controllers;
 
+import com.aftas.aftasapi.controllers.interfaces.GlobalController;
 import com.aftas.aftasapi.dtos.ReqMember;
 import com.aftas.aftasapi.dtos.ResMember;
 import com.aftas.aftasapi.services.IMemberService;
@@ -17,7 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
-public class MemberController implements GlobalController<ReqMember, ResMember, Integer>{
+public class MemberController implements GlobalController<ReqMember, ResMember, Integer> {
     private final IMemberService service;
 
     @Override

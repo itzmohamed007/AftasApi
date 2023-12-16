@@ -19,7 +19,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,21 +43,43 @@ public class CompetitionService implements ICompetitionService {
 
     @Override
     public List<ResCompetition> readAll() {
-        List<ResCompetition> competitions = repository.findAll().stream()
-                .map(competition -> modelMapper.map(competition, ResCompetition.class))
-                .toList();
-        if(competitions.isEmpty()) {
-            throw new CompetitionNotFoundException("No competitions were found");
-        }
-        return competitions;
+        return null;
     }
 
     @Override
     public Page<ResCompetition> readAllPaginated(Pageable pageable) {
-        Page<Competition> paginatedCompetitions = repository.findAll(pageable);
-        if(paginatedCompetitions.isEmpty()) {
-            throw new CompetitionNotFoundException("No Competitions were found");
-        }
+        return null;
+    }
+
+    @Override
+    public List<ResCompetition> readAllFiltered(String filter) {
+        List<Competition> competitions = repository.findAll();
+        List<Competition> filteredCompetitions;
+        filter = Objects.requireNonNullElse(filter, ""); // solve NullPointerException caused by .equals()
+
+        if(filter.equals("ongoing"))
+            filteredCompetitions = competitions.stream().filter(competition -> Objects.equals(competition.getDate(), LocalDate.now())).toList();
+        else if(filter.equals("finished"))
+            filteredCompetitions = competitions.stream().filter(competition -> competition.getDate().isBefore(LocalDate.now())).toList();
+        else filteredCompetitions = competitions;
+
+        if (filteredCompetitions.isEmpty()) throw new CompetitionNotFoundException("No competitions were found");
+
+        return filteredCompetitions.stream()
+                .map(competition -> modelMapper.map(competition, ResCompetition.class))
+                .toList();
+    }
+
+    @Override
+    public Page<ResCompetition> readAllFilteredPaginated(Pageable pageable, String filter) {
+        Page<Competition> paginatedCompetitions;
+        filter = Objects.requireNonNullElse(filter, ""); // solve NullPointerException caused by .equals()
+
+        if(filter.equals("ongoing")) paginatedCompetitions = repository.findAllByDate(LocalDate.now(), pageable);
+        else if(filter.equals("finished")) paginatedCompetitions = repository.findAllByDateBefore(LocalDate.now(), pageable);
+        else paginatedCompetitions = repository.findAll(pageable);
+
+        if(paginatedCompetitions.isEmpty()) throw new CompetitionNotFoundException("No Competitions were found");
         return paginatedCompetitions.map(competition -> modelMapper.map(competition, ResCompetition.class));
     }
 
