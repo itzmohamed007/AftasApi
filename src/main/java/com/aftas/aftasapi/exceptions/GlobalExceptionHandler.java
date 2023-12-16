@@ -78,4 +78,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleIllegalActionException(IllegalActionException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Map<String, String>> handleBadRequestException(BadRequestException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 }
