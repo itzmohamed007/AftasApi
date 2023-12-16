@@ -31,7 +31,6 @@ public class RankingService implements IRankingService {
     private final CompetitionRepository competitionRepository;
     private final MemberRepository memberRepository;
 
-
     @Override
     public ResRanking read(RankingId rankingId) {
         Optional<Ranking> ranking = repository.findById(rankingId);
@@ -62,32 +61,6 @@ public class RankingService implements IRankingService {
         return paginatedRankings.map(ranking -> modelMapper.map(ranking, ResRanking.class));
     }
 
-//    @Override
-//    public ResRanking create(ReqRanking reqRanking) {
-//        RankingId rankingId = new RankingId();
-//        reqRanking.setCompetition(reqRanking.getCompetition());
-//        reqRanking.setMember(reqRanking.getMember());
-//
-//        // Check 1: check if member and competition already exists
-//        Member member = memberRepository.findById(reqRanking.getMember()).orElseThrow(() -> new ResourceNotFoundException("Member not found with number " + reqRanking.getMember()));
-//        Competition competition = competitionRepository.findById(reqRanking.getCompetition()).orElseThrow(() -> new ResourceNotFoundException("Competition not found with code " + reqRanking.getCompetition()));
-//
-//        Ranking ranking = new Ranking();
-//        ranking.setId(rankingId);
-//        ranking.setCompetition(competition);
-//        ranking.setMember(member);
-//
-//        // Check 2: check if member is already present in competition
-//        if(repository.existsById(rankingId)) {
-//            System.out.println("member is already present in database");
-//            throw new UniqueConstraintViolationException("member already exists in this competition");
-//        }
-//        System.out.println("member is not present in database");
-//
-//        Ranking savedRanking = repository.save(ranking);
-//        return modelMapper.map(savedRanking, ResRanking.class);
-//    }
-
     @Override
     public ResRanking create(ReqRanking reqRanking) {
         // Check 1: check if member and competition already exist
@@ -102,7 +75,7 @@ public class RankingService implements IRankingService {
         // Check 2: check if member is already present in competition
         if (repository.existsById(rankingId)) throw new UniqueConstraintViolationException("Member already exists in this competition");
 
-        // Check 3: check for 1 day exception
+        // Check 3: check for 1 day exception (24h)
         long daysUntilCompetitionStart = ChronoUnit.DAYS.between(LocalDate.now(), competition.getDate());
 
         if (daysUntilCompetitionStart == 1) throw new TimeExceededException("Cannot assign member to a competition before 24 hours");
