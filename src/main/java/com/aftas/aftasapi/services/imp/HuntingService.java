@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -64,10 +65,10 @@ public class HuntingService implements IHuntingService {
         Fish fish = fishRepository.findById(reqHunting.getFish())
                 .orElseThrow(() -> new ResourceNotFoundException("Fish not found with name " + reqHunting.getFish()));
 
-        if (LocalTime.now().isBefore(competition.getStartTime()))
+        if (LocalTime.now().isBefore(competition.getStartTime()) || LocalDate.now().isBefore(competition.getDate()))
             throw new IllegalActionException("You cannot add new hunts to a competition that did not start yet.");
 
-        if (LocalTime.now().isAfter(competition.getEndTime()))
+        if (LocalTime.now().isAfter(competition.getEndTime()) || LocalDate.now().isAfter(competition.getDate()))
             throw new IllegalActionException("You cannot add new hunts to a competition that had already ended.");
 
         if (reqHunting.getFishWeight() <= fish.getAverageWeight())

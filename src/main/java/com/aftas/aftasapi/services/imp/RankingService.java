@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.SqlInOutParameter;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -106,5 +107,21 @@ public class RankingService implements IRankingService {
         Optional<Ranking> ranking = repository.findById(rankingId);
         if (ranking.isPresent()) repository.deleteById(rankingId);
         else throw new RankingNotFoundException("No ranking was found with id " + rankingId);
+    }
+
+    @Override
+    public List<ResRanking> calcRanking(String code) {
+        Competition dbCompetition = competitionRepository.findById(code)
+                .orElseThrow(() -> new ResourceNotFoundException("Competition not found with code " + code));
+        List<Ranking> sortedRankingsByScore = repository.findAllByCompetitionOrderByScoreDesc(dbCompetition);
+
+        for (int i = 0; i < sortedRankingsByScore.size(); i++) {
+            sortedRankingsByScore.get(i).setRank(i + 1);
+        }
+
+        List<Ranking> insertedRankings = repository.saveAll(sortedRankingsByScore);
+        return insertedRankings.stream()
+                .map(ranking -> modelMapper.map(ranking, ResRanking.class))
+                .toList();
     }
 }
