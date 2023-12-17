@@ -10,5 +10,5 @@ import com.aftas.aftasapi.models.RankingId;
 import java.util.List;
 
 public interface IRankingService extends MainService<ReqRanking, ResRanking, RankingId>{
-    List<ResRanking> calcRanking(Competition competition);
+    List<ResRanking> calcRanking(String code);
 }

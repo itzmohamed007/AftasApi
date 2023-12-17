@@ -6,6 +6,7 @@ import com.aftas.aftasapi.dtos.ResRanking;
 import com.aftas.aftasapi.models.RankingId;
 import com.aftas.aftasapi.services.IRankingService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +45,11 @@ public class RankingController implements GlobalController<ReqRanking, ResRankin
     @PostMapping
     public ResponseEntity<ResRanking> create(@RequestBody @Valid ReqRanking reqRanking) {
         return new ResponseEntity<>(service.create(reqRanking), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/podium/{competition}")
+    public ResponseEntity<List<ResRanking>> podium(@PathVariable String competition) {
+        return new ResponseEntity<>(service.calcRanking(competition), HttpStatus.CREATED);
     }
 
     @Override

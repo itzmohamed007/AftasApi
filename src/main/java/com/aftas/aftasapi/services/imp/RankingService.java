@@ -110,12 +110,15 @@ public class RankingService implements IRankingService {
     }
 
     @Override
-    public List<ResRanking> calcRanking(Competition competition) {
-        List<Ranking> sortedRankingsByScore = repository.findAllByCompetitionOrderByScoreDesc(competition);
-        final int[] counter = {0};
-        sortedRankingsByScore.forEach(ranking -> {
-            ranking.setRank(counter[0]++);
-        });
+    public List<ResRanking> calcRanking(String code) {
+        Competition dbCompetition = competitionRepository.findById(code)
+                .orElseThrow(() -> new ResourceNotFoundException("Competition not found with code " + code));
+        List<Ranking> sortedRankingsByScore = repository.findAllByCompetitionOrderByScoreDesc(dbCompetition);
+
+        for (int i = 0; i < sortedRankingsByScore.size(); i++) {
+            sortedRankingsByScore.get(i).setRank(i + 1);
+        }
+
         List<Ranking> insertedRankings = repository.saveAll(sortedRankingsByScore);
         return insertedRankings.stream()
                 .map(ranking -> modelMapper.map(ranking, ResRanking.class))
