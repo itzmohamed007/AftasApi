@@ -18,6 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/competitions")
+@CrossOrigin("http://localhost:4200")
 @RequiredArgsConstructor
 public class CompetitionController implements ICompetitionController<ReqCompetition, ResCompetition, String> {
     private final ICompetitionService service;

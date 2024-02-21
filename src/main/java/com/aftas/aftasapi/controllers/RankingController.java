@@ -18,8 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/rankings")
 @RequiredArgsConstructor
+@RequestMapping("/api/rankings")
+@CrossOrigin("http://localhost:4200")
 public class RankingController implements GlobalController<ReqRanking, ResRanking, RankingId> {
     private final IRankingService service;
 
