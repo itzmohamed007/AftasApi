@@ -9,13 +9,11 @@ import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
 import com.aftas.aftasapi.models.Member;
 import com.aftas.aftasapi.repositories.MemberRepository;
 import com.aftas.aftasapi.services.IMemberService;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

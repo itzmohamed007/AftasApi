@@ -6,7 +6,6 @@ import com.aftas.aftasapi.dtos.ResRanking;
 import com.aftas.aftasapi.models.RankingId;
 import com.aftas.aftasapi.services.IRankingService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

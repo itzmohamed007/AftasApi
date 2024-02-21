@@ -1,9 +1,6 @@
 package com.aftas.aftasapi.dtos;
 
 import com.aftas.aftasapi.dtos.competitions.CompetitionRanking;
-import com.aftas.aftasapi.models.Hunting;
-import com.aftas.aftasapi.models.Ranking;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.time.LocalDate;

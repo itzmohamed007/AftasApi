@@ -1,7 +1,5 @@
 package com.aftas.aftasapi.dtos;
 
-import com.aftas.aftasapi.models.Competition;
-import com.aftas.aftasapi.models.Member;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;

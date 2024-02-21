@@ -1,6 +1,5 @@
 package com.aftas.aftasapi.controllers;
 
-import com.aftas.aftasapi.controllers.interfaces.GlobalController;
 import com.aftas.aftasapi.controllers.interfaces.ICompetitionController;
 import com.aftas.aftasapi.dtos.ReqCompetition;
 import com.aftas.aftasapi.dtos.ResCompetition;

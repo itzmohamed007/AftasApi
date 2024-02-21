@@ -2,7 +2,6 @@ package com.aftas.aftasapi.models;
 
 import com.aftas.aftasapi.enums.IdentityDocumentType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;

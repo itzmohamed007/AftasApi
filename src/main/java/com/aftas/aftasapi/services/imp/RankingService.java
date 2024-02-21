@@ -1,10 +1,12 @@
 package com.aftas.aftasapi.services.imp;
 
 import com.aftas.aftasapi.dtos.ReqRanking;
-import com.aftas.aftasapi.dtos.ResFish;
 import com.aftas.aftasapi.dtos.ResRanking;
 import com.aftas.aftasapi.exceptions.*;
-import com.aftas.aftasapi.models.*;
+import com.aftas.aftasapi.models.Competition;
+import com.aftas.aftasapi.models.Member;
+import com.aftas.aftasapi.models.Ranking;
+import com.aftas.aftasapi.models.RankingId;
 import com.aftas.aftasapi.repositories.CompetitionRepository;
 import com.aftas.aftasapi.repositories.MemberRepository;
 import com.aftas.aftasapi.repositories.RankingRepository;
@@ -13,13 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.SqlInOutParameter;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
