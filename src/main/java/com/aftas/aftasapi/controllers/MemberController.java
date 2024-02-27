@@ -16,8 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/members")
 @RequiredArgsConstructor
+@RequestMapping("/api/members")
+@CrossOrigin("http://localhost:4200")
 public class MemberController implements GlobalController<ReqMember, ResMember, Integer> {
     private final IMemberService service;
 

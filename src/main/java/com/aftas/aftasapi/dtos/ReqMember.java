@@ -1,6 +1,5 @@
 package com.aftas.aftasapi.dtos;
 
-import com.aftas.aftasapi.enums.IdentityDocumentType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

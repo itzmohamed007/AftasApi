@@ -2,10 +2,7 @@ package com.aftas.aftasapi.services.imp;
 
 import com.aftas.aftasapi.dtos.ReqHunting;
 import com.aftas.aftasapi.dtos.ResHunting;
-import com.aftas.aftasapi.dtos.ResLevel;
-import com.aftas.aftasapi.exceptions.BadRequestException;
 import com.aftas.aftasapi.exceptions.IllegalActionException;
-import com.aftas.aftasapi.exceptions.LevelNotFoundException;
 import com.aftas.aftasapi.exceptions.ResourceNotFoundException;
 import com.aftas.aftasapi.models.*;
 import com.aftas.aftasapi.repositories.*;
@@ -17,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +54,7 @@ public class HuntingService implements IHuntingService {
 
     @Override
     public ResHunting create(ReqHunting reqHunting) {
-        Member member = memberRepository.findById(reqHunting.getMember())
+        User member = memberRepository.findById(reqHunting.getMember())
                 .orElseThrow(() -> new ResourceNotFoundException("Member not found with num " + reqHunting.getMember()));
         Competition competition = competitionRepository.findById(reqHunting.getCompetition())
                 .orElseThrow(() -> new ResourceNotFoundException("Competition not found with code " + reqHunting.getCompetition()));

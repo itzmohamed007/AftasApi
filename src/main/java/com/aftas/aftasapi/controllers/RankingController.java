@@ -6,7 +6,6 @@ import com.aftas.aftasapi.dtos.ResRanking;
 import com.aftas.aftasapi.models.RankingId;
 import com.aftas.aftasapi.services.IRankingService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/rankings")
 @RequiredArgsConstructor
+@RequestMapping("/api/rankings")
+@CrossOrigin("http://localhost:4200")
 public class RankingController implements GlobalController<ReqRanking, ResRanking, RankingId> {
     private final IRankingService service;
 

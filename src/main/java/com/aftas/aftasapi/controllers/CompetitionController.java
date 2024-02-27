@@ -1,6 +1,5 @@
 package com.aftas.aftasapi.controllers;
 
-import com.aftas.aftasapi.controllers.interfaces.GlobalController;
 import com.aftas.aftasapi.controllers.interfaces.ICompetitionController;
 import com.aftas.aftasapi.dtos.ReqCompetition;
 import com.aftas.aftasapi.dtos.ResCompetition;
@@ -18,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/competitions")
+@CrossOrigin("http://localhost:4200")
 @RequiredArgsConstructor
 public class CompetitionController implements ICompetitionController<ReqCompetition, ResCompetition, String> {
     private final ICompetitionService service;
