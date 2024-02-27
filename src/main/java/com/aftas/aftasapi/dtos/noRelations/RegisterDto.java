@@ -11,26 +11,25 @@ import java.time.LocalDate;
 
 @Data
 public class RegisterDto {
-    @NotNull(message = "number cannot be null")
+//    @NotNull(message = "number cannot be null")
     private Integer num;
-    @NotBlank
+    @NotNull
     @Email(message = "email cannot be null")
     private String email;
-    @NotBlank(message = "password cannot be blank")
+    @NotNull(message = "password cannot be blank")
     @Size(min = 6, max = 20)
     private String password;
-    @NotBlank(message = "name cannot be null")
+    @NotNull(message = "name cannot be null")
     private String name;
-    @NotBlank(message = "family name cannot be null")
+    @NotNull(message = "family name cannot be null")
     private String familyName;
-    @NotNull(message = "accession date cannot be null")
     private LocalDate accessionDate;
-    @NotBlank(message = "nationality cannot be null")
+    @NotNull(message = "nationality cannot be null")
     private String nationality;
-    @NotBlank(message = "identity number cannot be null")
+    @NotNull(message = "identity number cannot be null")
     private String identityNumber;
     @NotNull(message = "identity document cannot be null")
     private IdentityDocumentType identityDocument;
-    @NotBlank(message = "role cannot be null")
+    @NotNull(message = "role cannot be null")
     private String role;
 }

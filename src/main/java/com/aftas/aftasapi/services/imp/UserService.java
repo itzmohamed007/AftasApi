@@ -12,7 +12,15 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
+    public List<User> fetchAllAccounts() {
+        return userRepository.findAll();
+    }
+
     public List<User> fetchAllLockedAccounts() {
         return userRepository.findAllByLockedTrue();
+    }
+
+    public void unlockAccount(Integer num) {
+        userRepository.unlockAccount(num);
     }
 }
