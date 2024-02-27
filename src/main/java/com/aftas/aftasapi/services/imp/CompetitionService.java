@@ -61,7 +61,7 @@ public class CompetitionService implements ICompetitionService {
             filteredCompetitions = competitions.stream().filter(competition -> competition.getDate().isBefore(LocalDate.now())).toList();
         else filteredCompetitions = competitions;
 
-        if (filteredCompetitions.isEmpty()) throw new CompetitionNotFoundException("No competitions were found");
+//        if (filteredCompetitions.isEmpty()) throw new CompetitionNotFoundException("No competitions were found");
 
         return filteredCompetitions.stream()
                 .map(competition -> modelMapper.map(competition, ResCompetition.class))
@@ -77,7 +77,7 @@ public class CompetitionService implements ICompetitionService {
         else if(filter.equals("finished")) paginatedCompetitions = repository.findAllByDateBefore(LocalDate.now(), pageable);
         else paginatedCompetitions = repository.findAll(pageable);
 
-        if(paginatedCompetitions.isEmpty()) throw new CompetitionNotFoundException("No Competitions were found");
+//        if(paginatedCompetitions.isEmpty()) throw new CompetitionNotFoundException("No Competitions were found");
         return paginatedCompetitions.map(competition -> modelMapper.map(competition, ResCompetition.class));
     }
 

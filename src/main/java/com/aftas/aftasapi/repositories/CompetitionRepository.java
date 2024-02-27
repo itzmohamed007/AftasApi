@@ -13,9 +13,9 @@ import java.util.Optional;
 @Repository
 public interface CompetitionRepository extends JpaRepository<Competition, String> {
     Optional<Competition> getByDate(LocalDate date);
-    @Query("SELECT COUNT(*) FROM Competition c JOIN Ranking r ON c.code = r.id.competitionCode JOIN Member m ON r.id.memberNum = m.num WHERE c.code = :competitionCode")
-    Integer getMembersCount(String competitionCode);
+    @Query("SELECT COUNT(*) FROM Competition c JOIN Ranking r ON c.code = r.id.competitionCode JOIN User m ON r.id.memberNum = m.num WHERE c.code = :competitionCode")
 
+    Integer getMembersCount(String competitionCode);
     Page<Competition> findAllByDateBefore(LocalDate date, Pageable pageable);
     Page<Competition> findAllByDate(LocalDate date, Pageable pageable);
 }

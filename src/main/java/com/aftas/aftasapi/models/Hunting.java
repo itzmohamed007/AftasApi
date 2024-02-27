@@ -24,7 +24,7 @@ public class Hunting {
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private User member;
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "competition_code")

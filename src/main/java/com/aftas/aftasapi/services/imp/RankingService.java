@@ -4,9 +4,9 @@ import com.aftas.aftasapi.dtos.ReqRanking;
 import com.aftas.aftasapi.dtos.ResRanking;
 import com.aftas.aftasapi.exceptions.*;
 import com.aftas.aftasapi.models.Competition;
-import com.aftas.aftasapi.models.Member;
 import com.aftas.aftasapi.models.Ranking;
 import com.aftas.aftasapi.models.RankingId;
+import com.aftas.aftasapi.models.User;
 import com.aftas.aftasapi.repositories.CompetitionRepository;
 import com.aftas.aftasapi.repositories.MemberRepository;
 import com.aftas.aftasapi.repositories.RankingRepository;
@@ -63,7 +63,7 @@ public class RankingService implements IRankingService {
     @Override
     public ResRanking create(ReqRanking reqRanking) {
         // Check 1: check if member and competition already exist
-        Member member = memberRepository.findById(reqRanking.getMember())
+        User member = memberRepository.findById(reqRanking.getMember())
                 .orElseThrow(() -> new ResourceNotFoundException("Member not found with number " + reqRanking.getMember()));
 
         Competition competition = competitionRepository.findById(reqRanking.getCompetition())

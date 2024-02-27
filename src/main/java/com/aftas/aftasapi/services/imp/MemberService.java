@@ -6,7 +6,7 @@ import com.aftas.aftasapi.enums.IdentityDocumentType;
 import com.aftas.aftasapi.exceptions.DocumentTypeViolationException;
 import com.aftas.aftasapi.exceptions.MemberNotFoundException;
 import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
-import com.aftas.aftasapi.models.Member;
+import com.aftas.aftasapi.models.User;
 import com.aftas.aftasapi.repositories.MemberRepository;
 import com.aftas.aftasapi.services.IMemberService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class MemberService implements IMemberService {
 
     @Override
     public ResMember read(Integer num) {
-        Optional<Member> member = repository.findById(num);
+        Optional<User> member = repository.findById(num);
         if(member.isPresent())
             return modelMapper.map(member.get(), ResMember.class);
         throw new MemberNotFoundException("member not found with num " + num);
@@ -46,7 +46,7 @@ public class MemberService implements IMemberService {
 
     @Override
     public Page<ResMember> readAllPaginated(Pageable pageable) {
-        Page<Member> paginatedMembers = repository.findAll(pageable);
+        Page<User> paginatedMembers = repository.findAll(pageable);
         if(paginatedMembers.isEmpty()) {
             throw new MemberNotFoundException("No Members were found");
         }
@@ -56,9 +56,9 @@ public class MemberService implements IMemberService {
     @Override
     public ResMember create(ReqMember reqMember) {
         try {
-            Member member = modelMapper.map(reqMember, Member.class);
+            User member = modelMapper.map(reqMember, User.class);
             member.setIdentityDocument(IdentityDocumentType.valueOf(reqMember.getIdentityDocument()));
-            Member savedMember = repository.save(member);
+            User savedMember = repository.save(member);
             return modelMapper.map(savedMember, ResMember.class);
         } catch (DataIntegrityViolationException e) {
             throw new UniqueConstraintViolationException("Violated unique constraint (document number)");
@@ -69,11 +69,11 @@ public class MemberService implements IMemberService {
 
     @Override
     public ResMember update(ReqMember reqMember, Integer num) {
-        Optional<Member> level = repository.findById(num);
+        Optional<User> level = repository.findById(num);
         if(level.isPresent()) {
             try {
                 reqMember.setNum(num);
-                Member insertMember = repository.save(modelMapper.map(reqMember, Member.class));
+                User insertMember = repository.save(modelMapper.map(reqMember, User.class));
                 return modelMapper.map(insertMember, ResMember.class);
             } catch (DataIntegrityViolationException e) {
                 throw new UniqueConstraintViolationException("Violated unique constraint (document number)");
@@ -83,7 +83,7 @@ public class MemberService implements IMemberService {
 
     @Override
     public void delete(Integer num) {
-        Optional<Member> member = repository.findById(num);
+        Optional<User> member = repository.findById(num);
         if (member.isPresent()) repository.deleteById(num);
         else throw new MemberNotFoundException("Member not found with num " + num);
     }

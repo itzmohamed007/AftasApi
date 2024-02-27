@@ -22,7 +22,7 @@ public class Ranking {
     @MapsId("memberNum")
     @JoinColumn(name = "member_num")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Member member;
+    private User member;
     @ManyToOne
     @MapsId("competitionCode")
     @JoinColumn(name = "competition_code")

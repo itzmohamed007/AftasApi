@@ -54,7 +54,7 @@ public class HuntingService implements IHuntingService {
 
     @Override
     public ResHunting create(ReqHunting reqHunting) {
-        Member member = memberRepository.findById(reqHunting.getMember())
+        User member = memberRepository.findById(reqHunting.getMember())
                 .orElseThrow(() -> new ResourceNotFoundException("Member not found with num " + reqHunting.getMember()));
         Competition competition = competitionRepository.findById(reqHunting.getCompetition())
                 .orElseThrow(() -> new ResourceNotFoundException("Competition not found with code " + reqHunting.getCompetition()));
