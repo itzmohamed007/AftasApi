@@ -3,6 +3,7 @@ package com.aftas.aftasapi.controllers;
 import com.aftas.aftasapi.dtos.noRelations.LoginDto;
 import com.aftas.aftasapi.dtos.noRelations.RegisterDto;
 import com.aftas.aftasapi.services.imp.AuthenticationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterDto registerDto) {
         return new ResponseEntity<>(Map.of("token", authenticationService.register(registerDto)), HttpStatus.OK);
     }
 
