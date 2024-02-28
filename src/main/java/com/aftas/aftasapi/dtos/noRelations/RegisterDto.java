@@ -17,7 +17,6 @@ public class RegisterDto {
     @Email(message = "email cannot be null")
     private String email;
     @NotNull(message = "password cannot be blank")
-    @Size(min = 6, max = 20)
     private String password;
     @NotNull(message = "name cannot be null")
     private String name;

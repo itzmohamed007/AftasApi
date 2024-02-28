@@ -4,12 +4,14 @@ import com.aftas.aftasapi.controllers.interfaces.ICompetitionController;
 import com.aftas.aftasapi.dtos.ReqCompetition;
 import com.aftas.aftasapi.dtos.ResCompetition;
 import com.aftas.aftasapi.services.ICompetitionService;
+import jakarta.persistence.PreUpdate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public class CompetitionController implements ICompetitionController<ReqCompetit
 
     @Override
     @GetMapping("/all")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<ResCompetition>> readAll(@RequestParam(name = "filter", required = false) String filter) {
         return new ResponseEntity<>(service.readAllFiltered(filter), HttpStatus.OK);
     }

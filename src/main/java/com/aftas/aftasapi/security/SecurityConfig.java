@@ -26,7 +26,9 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
 
     private final List<String> WHITE_LIST_MATCHERS = List.of(
-            "/api/auth/**"
+            "/api/auth/**",
+            "/swagger-ui/**",
+            "/swagger-ui"
     );
 
     @Bean
@@ -41,10 +43,9 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(request ->
                         request
-                                .anyRequest().permitAll()
-//                                .requestMatchers(createWhiteListMatchers())
-//                                .permitAll()
-//                                .anyRequest().authenticated()
+                                .requestMatchers(createWhiteListMatchers())
+                                .permitAll()
+                                .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(authenticationProvider)
