@@ -4,6 +4,7 @@ import com.aftas.aftasapi.dtos.ResMember;
 import com.aftas.aftasapi.dtos.noRelations.LoginDto;
 import com.aftas.aftasapi.dtos.noRelations.RegisterDto;
 import com.aftas.aftasapi.enums.IdentityDocumentType;
+import com.aftas.aftasapi.enums.Role;
 import com.aftas.aftasapi.exceptions.DocumentTypeViolationException;
 import com.aftas.aftasapi.exceptions.UniqueConstraintViolationException;
 import com.aftas.aftasapi.models.User;
@@ -29,6 +30,10 @@ public class AuthenticationService {
 
     public User register(RegisterDto registerDto) {
         try {
+            System.out.println("fslkdfj");
+            System.out.println(IdentityDocumentType.valueOf(registerDto.getIdentityDocument().toString()));
+//            System.out.println(Role.valueOf(registerDto.getRole()));
+            System.out.println(registerDto.getRole());
             User userToCreate = User.builder()
                 .name(registerDto.getName())
                 .familyName(registerDto.getFamilyName())
@@ -38,7 +43,7 @@ public class AuthenticationService {
                 .identityNumber(registerDto.getIdentityNumber())
                 .identityDocument(IdentityDocumentType.valueOf(registerDto.getIdentityDocument().toString()))
                 .accessionDate(LocalDate.now())
-                .role(registerDto.getRole())
+                .role(Role.valueOf(registerDto.getRole()))
                 .locked(true)
                 .build();
 
@@ -46,7 +51,7 @@ public class AuthenticationService {
         } catch (DataIntegrityViolationException e) {
             throw new UniqueConstraintViolationException("Violated unique constraint (document number)");
         } catch ( IllegalArgumentException e) {
-            throw new DocumentTypeViolationException("Violated available documents types [CIN, RESIDENCE_CARD, PASSPORT]");
+            throw new DocumentTypeViolationException("Violated Enum Values Role or Document Type");
         }
     }
 

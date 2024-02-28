@@ -1,6 +1,7 @@
 package com.aftas.aftasapi.models;
 
 import com.aftas.aftasapi.enums.IdentityDocumentType;
+import com.aftas.aftasapi.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,16 +36,17 @@ public class User implements UserDetails {
     private String identityNumber;
     @Enumerated(EnumType.STRING)
     private IdentityDocumentType identityDocument;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     private boolean locked;
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
     private List<Ranking> rankings;
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
     private List<Hunting> hunting;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(this.getRole()));
+        return List.of(new SimpleGrantedAuthority(this.getRole().toString()));
     }
 
     @Override
